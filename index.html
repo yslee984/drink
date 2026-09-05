@@ -33,6 +33,7 @@
     .admin { border: 2px dashed #ddd; }
     .notice { padding: 12px; border-radius: 10px; background: #fff7dc; border: 1px solid #f0dc94; color: #735d00; font-size: 13px; line-height: 1.7; }
     .success { padding: 12px; border-radius: 10px; background: #eaf8ef; border: 1px solid #b9e4c7; color: #25733f; font-size: 13px; }
+    .danger { padding: 12px; border-radius: 10px; background: #fbe7e7; border: 1px solid #f5c6c6; color: #b33c3c; font-size: 13px; word-break: break-all; }
 
     .menu-preview { width: 100%; max-height: 350px; object-fit: contain; margin-top: 12px; border-radius: 12px; background: #f4f4f4; display: none; }
     .people-list { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -78,28 +79,29 @@
     <div id="statusBadge" class="status open">● 訂購中</div>
   </div>
 
+  <!-- 管理區 -->
   <div class="card admin">
-    <h2>⚙️ 管理區</h2>
+    <h2>⚙️ 匯入 / 管理菜單</h2>
     
     <div class="field" style="margin-bottom: 12px;">
       <label>Gemini API Key (AI 辨識必填)</label>
-      <input id="apiKeyInput" type="password" placeholder="請貼上你的 AQ. 開頭 Key" onchange="saveApiKey()">
+      <input id="apiKeyInput" type="password" placeholder="貼上你的 API Key" onchange="saveApiKey()">
     </div>
 
-    <label>上傳今日菜單照片</label>
+    <label>上傳菜單照片</label>
     <div class="row">
       <div class="field">
         <input id="menuImage" type="file" accept="image/*" onchange="previewImage(event)">
       </div>
-      <button class="blue" onclick="runGeminiOCR()">🤖 AI 自動辨識並產生菜單</button>
+      <button class="blue" onclick="runGeminiOCR()">🤖 AI 分析照片</button>
       <button class="green" onclick="publishMenu()">📤 發布今日菜單</button>
     </div>
 
     <img id="menuPreview" class="menu-preview">
-    <div id="ocrStatus" class="success hidden" style="margin-top:12px;"></div>
+    <div id="ocrStatus" class="hidden" style="margin-top:12px;"></div>
 
     <div style="height:12px;"></div>
-    <button class="gray" onclick="toggleEditor()">✏️ 檢視 / 編輯菜單資料</button>
+    <button class="gray" onclick="toggleEditor()">✏️ 檢視/手動修改菜單項目</button>
 
     <div id="menuEditor" class="hidden" style="margin-top:15px;">
       <div id="editorContainer"></div>
@@ -116,6 +118,7 @@
     </div>
   </div>
 
+  <!-- 訂購人 -->
   <div class="card">
     <h2>👥 誰要喝？</h2>
     <div class="people-list" id="peopleList"></div>
@@ -128,6 +131,7 @@
     </div>
   </div>
 
+  <!-- 點餐區 -->
   <div class="card">
     <h2>🧋 我要點飲料</h2>
     <div id="closedMessage" class="notice hidden">🔒 目前已關閉訂購。</div>
@@ -170,7 +174,163 @@
     </div>
   </div>
 
+  <!-- 今日訂單 -->
   <div class="card">
     <h2>📋 今日訂單</h2>
     <div id="ordersContainer"></div>
-    <div
+    <div class="total-box">
+      <div>目前總金額</div>
+      <div id="totalAmount" class="total-number">$0</div>
+      <div style="height:12px;"></div>
+      <button class="full" onclick="generateLineMessage()">📋 產生 LINE 訂單訊息</button>
+    </div>
+  </div>
+
+  <!-- LINE 輸出 -->
+  <div class="card">
+    <h2>💬 LINE 訂單訊息</h2>
+    <textarea id="lineMessage" readonly placeholder="產生後可以直接複製貼到 LINE"></textarea>
+    <div style="height:10px;"></div>
+    <button class="blue full" onclick="copyLineMessage()">📋 複製訊息</button>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const DATABASE_URL = "https://my-family-calendar-219bb-default-rtdb.firebaseio.com";
+let currentDate = "";
+let data = { shopName: "", isOpen: true, menu: [], orders: {} };
+let people = ["Alice", "Bob", "Charlie"];
+let selectedName = "";
+let selectedToppings = [];
+
+const toppings = [
+  { name: "珍珠", price: 10 }, { name: "黃金珍珠", price: 10 },
+  { name: "焙烏龍茶凍", price: 10 }, { name: "芝士奶蓋", price: 20 }
+];
+
+function toast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), 2000);
+}
+
+function saveApiKey() {
+  localStorage.setItem("gemini_api_key", document.getElementById("apiKeyInput").value.trim());
+}
+
+document.addEventListener("DOMContentLoaded", async function() {
+  const today = new Date();
+  currentDate = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
+  document.getElementById("orderDate").value = currentDate;
+  
+  const savedKey = localStorage.getItem("gemini_api_key");
+  if(savedKey) document.getElementById("apiKeyInput").value = savedKey;
+
+  document.getElementById("drinkSelect").addEventListener("change", updatePrice);
+  document.getElementById("sizeSelect").addEventListener("change", updatePrice);
+
+  renderToppings();
+  await loadToday();
+  startSync();
+});
+
+/* Firebase API */
+function dbUrl(path) { return DATABASE_URL + "/" + path + ".json"; }
+async function dbGet(path) { return (await fetch(dbUrl(path), { cache: "no-store" })).json(); }
+async function dbPatch(path, val) { return (await fetch(dbUrl(path), { method: "PATCH", headers: {"Content-Type": "application/json"}, body: JSON.stringify(val) })).json(); }
+async function dbPut(path, val) { return (await fetch(dbUrl(path), { method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(val) })).json(); }
+
+async function loadToday() {
+  const result = await dbGet("drinkOrders/" + currentDate);
+  if (result) {
+    data.shopName = result.shopName || "";
+    data.isOpen = result.isOpen !== false;
+    data.menu = result.menu || [];
+    data.orders = result.orders || {};
+  }
+  document.getElementById("shopName").value = data.shopName;
+  renderAll();
+}
+
+function startSync() {
+  setInterval(async () => {
+    const res = await dbGet("drinkOrders/" + currentDate + "/orders");
+    data.orders = res || {};
+    renderOrders();
+  }, 4000);
+}
+
+/* AI Gemini 辨識 */
+async function runGeminiOCR() {
+  const apiKey = document.getElementById("apiKeyInput").value.trim();
+  const fileInput = document.getElementById("menuImage");
+  const file = fileInput.files[0];
+
+  if (!apiKey) { alert("請先輸入 Gemini API Key！"); return; }
+  if (!file) { alert("請上傳菜單照片！"); return; }
+
+  const status = document.getElementById("ocrStatus");
+  status.className = "notice";
+  status.classList.remove("hidden");
+  status.textContent = "🤖 AI 分析照片中，請稍候...";
+
+  // 正確解析圖片的 Base64 數據與 MimeType
+  const imageData = await new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataUrl = e.target.result;
+      const mimeType = dataUrl.split(';')[0].split(':')[1] || 'image/jpeg';
+      const base64 = dataUrl.split(',')[1];
+      resolve({ mimeType, base64 });
+    };
+    reader.readAsDataURL(file);
+  });
+
+  const promptText = `
+你是一個菜單解析助手。請讀取這張菜單圖片，擷取所有飲料品項名稱與中杯(M)/大杯(L)價格。
+請只輸出 JSON 格式陣列，不要有任何 Markdown 說明文字，格式如下：
+[
+  {
+    "category": "分類名稱",
+    "items": [
+      { "name": "品項名稱", "M": 50, "L": 60 }
+    ]
+  }
+]
+如果該飲料只有一種容量與價格，請將 M 與 L 的金額設為相同數字。請忽略英文翻譯。
+`;
+
+  // 嘗試相容性最高的 model endpoint
+  const modelsToTry = [
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
+  ];
+
+  let lastError = "";
+
+  for (const endpoint of modelsToTry) {
+    try {
+      const response = await fetch(`${endpoint}?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [
+              { text: promptText },
+              { inline_data: { mime_type: imageData.mimeType, data: imageData.base64 } }
+            ]
+          }]
+        })
+      });
+
+      const resData = await response.json();
+      if (resData.error) {
+        lastError = resData.error.message || JSON.stringify(resData.error);
+        continue; // 嘗試下一個模型
+      }
+
+      let text = resData.candidates[0].content.parts[0].text.trim();
+      text = text.replace(/```json/gi, '').replace(/
