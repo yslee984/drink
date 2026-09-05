@@ -1,3922 +1,918 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<meta name="theme-color" content="#ffffff">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-
-<meta name="apple-mobile-web-app-status-bar-style"
-      content="default">
-
-<meta name="apple-mobile-web-app-title"
-      content="飲料團購">
-
-<title>🥤 飲料團購</title>
-
-
-<style>
-
-/* =====================================================
-   基本
-===================================================== */
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  padding: 12px;
-  background: #f5f6f8;
-  color: #222;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    "Noto Sans TC",
-    Arial,
-    sans-serif;
-}
-
-.container {
-  max-width: 900px;
-  margin: auto;
-}
-
-.card {
-  background: #fff;
-  border-radius: 18px;
-  padding: 18px;
-  margin-bottom: 14px;
-  box-shadow: 0 2px 12px rgba(0,0,0,.06);
-}
-
-h1 {
-  margin: 0;
-  font-size: 28px;
-}
-
-h2 {
-  margin: 0 0 14px;
-  font-size: 20px;
-}
-
-h3 {
-  margin: 0 0 10px;
-}
-
-.subtitle {
-  margin-top: 6px;
-  color: #777;
-}
-
-.row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.field {
-  flex: 1;
-  min-width: 180px;
-}
-
-label {
-  display: block;
-  font-size: 13px;
-  color: #666;
-  margin-bottom: 6px;
-}
-
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 11px 12px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  font-size: 15px;
-  background: white;
-}
-
-textarea {
-  min-height: 180px;
-}
-
-button {
-  border: 0;
-  border-radius: 10px;
-  padding: 11px 15px;
-  background: #222;
-  color: white;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-button:hover {
-  opacity: .9;
-}
-
-button.green {
-  background: #2e8b57;
-}
-
-button.red {
-  background: #d9534f;
-}
-
-button.blue {
-  background: #3976cf;
-}
-
-button.orange {
-  background: #df8b00;
-}
-
-button.gray {
-  background: #eee;
-  color: #333;
-}
-
-button.small {
-  padding: 7px 10px;
-  font-size: 13px;
-}
-
-button.full {
-  width: 100%;
-}
-
-.hidden {
-  display: none !important;
-}
-
-
-/* =====================================================
-   狀態
-===================================================== */
-
-.status {
-  display: inline-block;
-  margin-top: 15px;
-  padding: 7px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.status.open {
-  background: #e5f7ed;
-  color: #21834b;
-}
-
-.status.closed {
-  background: #fbe7e7;
-  color: #b33c3c;
-}
-
-
-/* =====================================================
-   管理區
-===================================================== */
-
-.admin {
-  border: 2px dashed #ddd;
-}
-
-.notice {
-  padding: 12px;
-  border-radius: 10px;
-  background: #fff7dc;
-  border: 1px solid #f0dc94;
-  color: #735d00;
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-.success {
-  padding: 12px;
-  border-radius: 10px;
-  background: #eaf8ef;
-  border: 1px solid #b9e4c7;
-  color: #25733f;
-  font-size: 13px;
-}
-
-
-/* =====================================================
-   菜單圖片
-===================================================== */
-
-.menu-preview {
-  width: 100%;
-  max-height: 600px;
-  object-fit: contain;
-  margin-top: 12px;
-  border-radius: 12px;
-  background: #f4f4f4;
-  display: none;
-}
-
-
-/* =====================================================
-   人員
-===================================================== */
-
-.people-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.person-btn {
-  background: #f1f3f5;
-  color: #333;
-  border: 1px solid #ddd;
-}
-
-.person-btn.selected {
-  background: #222;
-  color: white;
-}
-
-
-/* =====================================================
-   菜單編輯器
-===================================================== */
-
-.category-editor {
-  border: 1px solid #eee;
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 12px;
-}
-
-.category-header {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.drink-editor {
-  display: grid;
-  grid-template-columns: 1fr 75px 75px 42px;
-  gap: 6px;
-  margin-bottom: 7px;
-}
-
-.drink-editor input {
-  padding: 8px;
-  font-size: 14px;
-}
-
-
-/* =====================================================
-   訂單
-===================================================== */
-
-.order-person {
-  padding: 13px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.order-person:last-child {
-  border-bottom: 0;
-}
-
-.person-header {
-  display: flex;
-  justify-content: space-between;
-  font-weight: 700;
-  font-size: 16px;
-}
-
-.order-item {
-  margin-top: 8px;
-  padding: 10px;
-  background: #f8f8f8;
-  border-radius: 10px;
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.order-actions {
-  margin-top: 5px;
-}
-
-.price {
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.total-box {
-  margin-top: 15px;
-  padding: 18px;
-  background: #222;
-  color: white;
-  border-radius: 14px;
-}
-
-.total-number {
-  font-size: 30px;
-  font-weight: 700;
-}
-
-
-/* =====================================================
-   Toast
-===================================================== */
-
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: 25px;
-  transform: translateX(-50%);
-  background: #222;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 30px;
-  font-size: 14px;
-  z-index: 9999;
-  opacity: 0;
-  pointer-events: none;
-  transition: .25s;
-}
-
-.toast.show {
-  opacity: 1;
-}
-
-
-/* =====================================================
-   OCR
-===================================================== */
-
-.ocr-result {
-  margin-top: 12px;
-  background: #f7f7f7;
-  border-radius: 10px;
-  padding: 12px;
-  white-space: pre-wrap;
-  font-size: 13px;
-  line-height: 1.6;
-  max-height: 300px;
-  overflow: auto;
-}
-
-
-/* =====================================================
-   手機
-===================================================== */
-
-@media(max-width:600px) {
-
-  body {
-    padding: 8px;
-  }
-
-  .card {
-    padding: 14px;
-    border-radius: 15px;
-  }
-
-  h1 {
-    font-size: 24px;
-  }
-
-  .drink-editor {
-    grid-template-columns:
-      1fr 62px 62px 38px;
-  }
-
-  button {
-    padding: 10px 12px;
-  }
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="飲料團購">
+  <title>🥤 飲料團購</title>
+
+  <style>
+    /* 基本 */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 12px;
+      background: #f5f6f8;
+      color: #222;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", Arial, sans-serif;
+    }
+    .container { max-width: 900px; margin: auto; }
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    h1 { margin: 0; font-size: 28px; }
+    h2 { margin: 0 0 14px; font-size: 20px; }
+    .subtitle { margin-top: 6px; color: #777; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .field { flex: 1; min-width: 180px; }
+    label { display: block; font-size: 13px; color: #666; margin-bottom: 6px; }
+    input, select, textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+      background: white;
+    }
+    textarea { min-height: 150px; }
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 15px;
+      background: #222;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    button:hover { opacity: .9; }
+    button.green { background: #2e8b57; }
+    button.red { background: #d9534f; }
+    button.blue { background: #3976cf; }
+    button.gray { background: #eee; color: #333; }
+    button.small { padding: 7px 10px; font-size: 13px; }
+    button.full { width: 100%; }
+    .hidden { display: none !important; }
+
+    /* 狀態與提示 */
+    .status { display: inline-block; margin-top: 15px; padding: 7px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+    .status.open { background: #e5f7ed; color: #21834b; }
+    .status.closed { background: #fbe7e7; color: #b33c3c; }
+    .admin { border: 2px dashed #ddd; }
+    .notice { padding: 12px; border-radius: 10px; background: #fff7dc; border: 1px solid #f0dc94; color: #735d00; font-size: 13px; line-height: 1.7; }
+    .success { padding: 12px; border-radius: 10px; background: #eaf8ef; border: 1px solid #b9e4c7; color: #25733f; font-size: 13px; }
+
+    /* 預覽與 OCR */
+    .menu-preview { width: 100%; max-height: 400px; object-fit: contain; margin-top: 12px; border-radius: 12px; background: #f4f4f4; display: none; }
+    .ocr-result { margin-top: 12px; background: #f7f7f7; border-radius: 10px; padding: 12px; white-space: pre-wrap; font-size: 13px; line-height: 1.6; max-height: 200px; overflow: auto; }
+
+    /* 清單類 */
+    .people-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .person-btn { background: #f1f3f5; color: #333; border: 1px solid #ddd; }
+    .person-btn.selected { background: #222; color: white; }
+    .category-editor { border: 1px solid #eee; border-radius: 12px; padding: 12px; margin-bottom: 12px; }
+    .category-header { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+    .drink-editor { display: grid; grid-template-columns: 1fr 75px 75px 42px; gap: 6px; margin-bottom: 7px; }
+    .drink-editor input { padding: 8px; font-size: 14px; }
+    .order-person { padding: 13px 0; border-bottom: 1px solid #eee; }
+    .order-person:last-child { border-bottom: 0; }
+    .person-header { display: flex; justify-content: space-between; font-weight: 700; font-size: 16px; }
+    .order-item { margin-top: 8px; padding: 10px; background: #f8f8f8; border-radius: 10px; font-size: 14px; line-height: 1.7; }
+    .price { font-weight: 700; white-space: nowrap; }
+    .total-box { margin-top: 15px; padding: 18px; background: #222; color: white; border-radius: 14px; }
+    .total-number { font-size: 30px; font-weight: 700; }
+    .toast { position: fixed; left: 50%; bottom: 25px; transform: translateX(-50%); background: #222; color: white; padding: 12px 18px; border-radius: 30px; font-size: 14px; z-index: 9999; opacity: 0; pointer-events: none; transition: .25s; }
+    .toast.show { opacity: 1; }
+
+    @media(max-width:600px) {
+      body { padding: 8px; }
+      .card { padding: 14px; border-radius: 15px; }
+      h1 { font-size: 24px; }
+      .drink-editor { grid-template-columns: 1fr 62px 62px 38px; }
+      button { padding: 10px 12px; }
+    }
+  </style>
 </head>
 
-
 <body>
-
 <div class="container">
-
-
-<!-- =====================================================
-     標題
-===================================================== -->
-
-<div class="card">
-
-  <h1>🥤 飲料團購</h1>
-
-  <div class="subtitle">
-    今天一起訂飲料
-  </div>
-
-
-  <div style="height:15px;"></div>
-
-
-  <div class="row">
-
-    <div class="field">
-
-      <label>店家</label>
-
-      <input
-        id="shopName"
-        placeholder="例如：得正"
-      >
-
-    </div>
-
-
-    <div class="field">
-
-      <label>日期</label>
-
-      <input
-        id="orderDate"
-        type="date"
-      >
-
-    </div>
-
-  </div>
-
-
-  <div
-    id="statusBadge"
-    class="status open"
-  >
-    ● 訂購中
-  </div>
-
-</div>
-
-
-
-<!-- =====================================================
-     管理區
-===================================================== -->
-
-<div class="card admin">
-
-  <h2>⚙️ 管理區</h2>
-
-
-  <div class="notice">
-
-    這裡是開團的人使用的區域。<br>
-
-    可以上傳今天菜單、辨識菜單、修改菜單，
-    然後發布給大家一起訂購。
-
-  </div>
-
-
-  <div style="height:15px;"></div>
-
-
-  <label>
-    上傳今日菜單
-  </label>
-
-
-  <div class="row">
-
-    <div class="field">
-
-      <input
-        id="menuImage"
-        type="file"
-        accept="image/*"
-      >
-
-    </div>
-
-
-    <button
-      class="blue"
-      onclick="runOCR()"
-    >
-      🤖 菜單辨識
-    </button>
-
-
-    <button
-      class="green"
-      onclick="publishMenu()"
-    >
-      📤 發布今日菜單
-    </button>
-
-  </div>
-
-
-  <img
-    id="menuPreview"
-    class="menu-preview"
-  >
-
-
-  <div
-    id="ocrStatus"
-    class="success hidden"
-    style="margin-top:12px;"
-  ></div>
-
-
-  <div
-    id="ocrResult"
-    class="ocr-result hidden"
-  ></div>
-
-
-  <div style="height:12px;"></div>
-
-
-  <button
-    class="gray"
-    onclick="toggleEditor()"
-  >
-    ✏️ 編輯今日菜單
-  </button>
-
-
-  <div
-    id="menuEditor"
-    class="hidden"
-    style="margin-top:15px;"
-  >
-
-    <div id="editorContainer"></div>
-
-
+  <!-- 標題 -->
+  <div class="card">
+    <h1>🥤 飲料團購</h1>
+    <div class="subtitle">今天一起訂飲料</div>
+    <div style="height:15px;"></div>
     <div class="row">
-
-      <button
-        class="gray"
-        onclick="addCategory()"
-      >
-        ＋ 新增分類
-      </button>
-
-
-      <button
-        class="green"
-        onclick="publishMenu()"
-      >
-        💾 儲存菜單
-      </button>
-
+      <div class="field">
+        <label>店家</label>
+        <input id="shopName" placeholder="例如：得正">
+      </div>
+      <div class="field">
+        <label>日期</label>
+        <input id="orderDate" type="date">
+      </div>
     </div>
-
+    <div id="statusBadge" class="status open">● 訂購中</div>
   </div>
 
-
-  <div style="height:15px;"></div>
-
-
-  <div class="row">
-
-    <button
-      class="green"
-      onclick="setOrderStatus(true)"
-    >
-      🔓 開始訂購
-    </button>
-
-
-    <button
-      class="red"
-      onclick="setOrderStatus(false)"
-    >
-      🔒 關閉訂購
-    </button>
-
-  </div>
-
-</div>
-
-
-
-<!-- =====================================================
-     訂購人
-===================================================== -->
-
-<div class="card">
-
-  <h2>👥 誰要喝？</h2>
-
-
-  <div class="people-list"
-       id="peopleList">
-
-    <div style="color:#999;">
-      載入中……
+  <!-- 管理區 -->
+  <div class="card admin">
+    <h2>⚙️ 管理區</h2>
+    <div class="notice">
+      這裡是開團的人使用的區域。<br>
+      可以上傳今天菜單、辨識菜單、修改菜單，然後發布給大家一起訂購。
     </div>
-
-  </div>
-
-
-  <div style="height:12px;"></div>
-
-
-  <div class="row">
-
-    <div class="field">
-
-      <input
-        id="newPerson"
-        placeholder="輸入同事姓名"
-      >
-
-    </div>
-
-
-    <button
-      onclick="addPerson()"
-    >
-      ＋ 新增
-    </button>
-
-  </div>
-
-
-  <div style="height:10px;"></div>
-
-
-  <button
-    class="gray small"
-    onclick="loadPeopleFromFirebase()"
-  >
-    🔄 更新名單
-  </button>
-
-
-  <button
-    class="gray small"
-    onclick="useYesterdayPeople()"
-  >
-    📅 沿用昨天訂購者
-  </button>
-
-</div>
-
-
-
-<!-- =====================================================
-     點餐
-===================================================== -->
-
-<div class="card">
-
-  <h2>🧋 我要點飲料</h2>
-
-
-  <div
-    id="closedMessage"
-    class="notice hidden"
-  >
-    🔒 目前已關閉訂購。
-  </div>
-
-
-  <div id="orderForm">
-
-
-    <div class="field">
-
-      <label>飲料</label>
-
-      <select
-        id="drinkSelect"
-      ></select>
-
-    </div>
-
-
-    <div style="height:10px;"></div>
-
-
+    <div style="height:15px;"></div>
+    <label>上傳今日菜單</label>
     <div class="row">
-
-
       <div class="field">
-
-        <label>大小</label>
-
-        <select id="sizeSelect">
-
-          <option value="M">
-            M
-          </option>
-
-          <option value="L">
-            L
-          </option>
-
-        </select>
-
+        <input id="menuImage" type="file" accept="image/*">
       </div>
-
-
-      <div class="field">
-
-        <label>甜度</label>
-
-        <select id="sugarSelect">
-
-          <option>正常糖</option>
-          <option>少糖</option>
-          <option>半糖</option>
-          <option>微糖</option>
-          <option>無糖</option>
-
-        </select>
-
-      </div>
-
-
-      <div class="field">
-
-        <label>冰量</label>
-
-        <select id="iceSelect">
-
-          <option>正常冰</option>
-          <option>少冰</option>
-          <option>微冰</option>
-          <option>去冰</option>
-          <option>溫</option>
-          <option>熱</option>
-
-        </select>
-
-      </div>
-
-
+      <button class="blue" onclick="runOCR()">🤖 菜單辨識</button>
+      <button class="green" onclick="publishMenu()">📤 發布今日菜單</button>
     </div>
 
-
+    <img id="menuPreview" class="menu-preview">
+    <div id="ocrStatus" class="success hidden" style="margin-top:12px;"></div>
+    <div id="ocrResult" class="ocr-result hidden"></div>
     <div style="height:12px;"></div>
 
+    <button class="gray" onclick="toggleEditor()">✏️ 編輯今日菜單</button>
 
-    <label>
-      加料
-    </label>
-
-
-    <div
-      id="toppingList"
-      class="people-list"
-    ></div>
-
+    <div id="menuEditor" class="hidden" style="margin-top:15px;">
+      <div id="editorContainer"></div>
+      <div class="row">
+        <button class="gray" onclick="addCategory()">＋ 新增分類</button>
+        <button class="green" onclick="publishMenu()">💾 儲存菜單</button>
+      </div>
+    </div>
 
     <div style="height:15px;"></div>
-
-
-    <div class="order-box"
-         style="
-           background:#fafafa;
-           padding:14px;
-           border-radius:12px;
-         ">
-
-
-      <div
-        style="
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-        "
-      >
-
-        <strong>
-          本杯金額
-        </strong>
-
-        <span
-          id="currentPrice"
-          class="price"
-        >
-          $0
-        </span>
-
-      </div>
-
-
-      <div style="height:10px;"></div>
-
-
-      <button
-        class="green full"
-        onclick="addOrder()"
-      >
-        🛒 加入我的訂單
-      </button>
-
-
+    <div class="row">
+      <button class="green" onclick="setOrderStatus(true)">🔓 開始訂購</button>
+      <button class="red" onclick="setOrderStatus(false)">🔒 關閉訂購</button>
     </div>
-
   </div>
 
-</div>
-
-
-
-<!-- =====================================================
-     今日訂單
-===================================================== -->
-
-<div class="card">
-
-  <h2>📋 今日訂單</h2>
-
-
-  <div id="ordersContainer">
-
-    <div style="
-      text-align:center;
-      color:#999;
-      padding:20px;
-    ">
-      載入訂單中……
+  <!-- 訂購人 -->
+  <div class="card">
+    <h2>👥 誰要喝？</h2>
+    <div class="people-list" id="peopleList">
+      <div style="color:#999;">載入中……</div>
     </div>
-
-  </div>
-
-
-  <div class="total-box">
-
-    <div>
-      目前總金額
-    </div>
-
-
-    <div
-      id="totalAmount"
-      class="total-number"
-    >
-      $0
-    </div>
-
-
     <div style="height:12px;"></div>
-
-
-    <button
-      class="full"
-      onclick="generateLineMessage()"
-    >
-      📋 產生 LINE 訂單訊息
-    </button>
-
+    <div class="row">
+      <div class="field">
+        <input id="newPerson" placeholder="輸入同事姓名">
+      </div>
+      <button onclick="addPerson()">＋ 新增</button>
+    </div>
+    <div style="height:10px;"></div>
+    <button class="gray small" onclick="loadPeopleFromFirebase()">🔄 更新名單</button>
+    <button class="gray small" onclick="useYesterdayPeople()">📅 沿用昨天訂購者</button>
   </div>
 
-</div>
-
-
-
-<!-- =====================================================
-     LINE
-===================================================== -->
-
-<div class="card">
-
-  <h2>💬 LINE 訂單訊息</h2>
-
-
-  <textarea
-    id="lineMessage"
-    readonly
-    placeholder="產生後可以直接複製貼到 LINE"
-  ></textarea>
-
-
-  <div style="height:10px;"></div>
-
-
-  <button
-    class="blue full"
-    onclick="copyLineMessage()"
-  >
-    📋 複製訊息
-  </button>
-
-</div>
-
-
-
-<!-- =====================================================
-     系統
-===================================================== -->
-
-<div class="card">
-
-  <div
-    style="
-      font-size:13px;
-      color:#777;
-      line-height:1.8;
-    "
-  >
-
-    <strong>
-      系統狀態
-    </strong>
-
-    <br>
-
-    Firebase：
-    <span id="firebaseStatus">
-      連線中……
-    </span>
-
-    <br>
-
-    最後同步：
-    <span id="lastSync">
-      —
-    </span>
-
+  <!-- 點餐 -->
+  <div class="card">
+    <h2>🧋 我要點飲料</h2>
+    <div id="closedMessage" class="notice hidden">🔒 目前已關閉訂購。</div>
+    <div id="orderForm">
+      <div class="field">
+        <label>飲料</label>
+        <select id="drinkSelect"></select>
+      </div>
+      <div style="height:10px;"></div>
+      <div class="row">
+        <div class="field">
+          <label>大小</label>
+          <select id="sizeSelect">
+            <option value="M">M</option>
+            <option value="L">L</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>甜度</label>
+          <select id="sugarSelect">
+            <option>正常糖</option><option>少糖</option><option>半糖</option><option>微糖</option><option>無糖</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>冰量</label>
+          <select id="iceSelect">
+            <option>正常冰</option><option>少冰</option><option>微冰</option><option>去冰</option><option>溫</option><option>熱</option>
+          </select>
+        </div>
+      </div>
+      <div style="height:12px;"></div>
+      <label>加料</label>
+      <div id="toppingList" class="people-list"></div>
+      <div style="height:15px;"></div>
+      <div class="order-box" style="background:#fafafa;padding:14px;border-radius:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <strong>本杯金額</strong>
+          <span id="currentPrice" class="price">$0</span>
+        </div>
+        <div style="height:10px;"></div>
+        <button class="green full" onclick="addOrder()">🛒 加入我的訂單</button>
+      </div>
+    </div>
   </div>
 
+  <!-- 今日訂單 -->
+  <div class="card">
+    <h2>📋 今日訂單</h2>
+    <div id="ordersContainer">
+      <div style="text-align:center;color:#999;padding:20px;">載入訂單中……</div>
+    </div>
+    <div class="total-box">
+      <div>目前總金額</div>
+      <div id="totalAmount" class="total-number">$0</div>
+      <div style="height:12px;"></div>
+      <button class="full" onclick="generateLineMessage()">📋 產生 LINE 訂單訊息</button>
+    </div>
+  </div>
+
+  <!-- LINE -->
+  <div class="card">
+    <h2>💬 LINE 訂單訊息</h2>
+    <textarea id="lineMessage" readonly placeholder="產生後可以直接複製貼到 LINE"></textarea>
+    <div style="height:10px;"></div>
+    <button class="blue full" onclick="copyLineMessage()">📋 複製訊息</button>
+  </div>
+
+  <!-- 系統 -->
+  <div class="card">
+    <div style="font-size:13px;color:#777;line-height:1.8;">
+      <strong>系統狀態</strong><br>
+      Firebase：<span id="firebaseStatus">連線中……</span><br>
+      最後同步：<span id="lastSync">—</span>
+    </div>
+  </div>
 </div>
 
+<div id="toast" class="toast"></div>
 
-</div>
-
-
-<div
-  id="toast"
-  class="toast"
-></div>
-
-
-
-<!-- =====================================================
-     OCR 套件
-===================================================== -->
-
-<script src="
-https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js
-"></script>
-
-
+<!-- OCR 套件 (Tesseract.js v5) -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
 <script>
-
 /* =====================================================
-   Firebase
+   Firebase & 全局變數
 ===================================================== */
-
-const DATABASE_URL =
-"https://my-family-calendar-219bb-default-rtdb.firebaseio.com";
-
-
-/*
-  所有飲料資料只放：
-
-  /drinkOrders/
-
-  不碰：
-
-  /calendar/
-*/
-
+const DATABASE_URL = "https://my-family-calendar-219bb-default-rtdb.firebaseio.com";
 
 let currentDate = "";
-
 let data = {
-
   shopName: "",
-
   isOpen: true,
-
   menu: [],
-
   orders: {}
-
 };
 
-
+let people = ["Alice", "Bob", "Charlie"]; // 預設人員名單範例
 let selectedName = "";
-
 let selectedToppings = [];
 
-
-/* =====================================================
-   加料
-===================================================== */
-
 const toppings = [
-
-  {
-    name: "珍珠",
-    price: 10
-  },
-
-  {
-    name: "仙草凍",
-    price: 10
-  },
-
-  {
-    name: "綠茶凍",
-    price: 10
-  },
-
-  {
-    name: "蜂蜜黑糖粉粿",
-    price: 15
-  },
-
-  {
-    name: "荔荔椰果",
-    price: 15
-  }
-
+  { name: "珍珠", price: 10 },
+  { name: "仙草凍", price: 10 },
+  { name: "綠茶凍", price: 10 },
+  { name: "蜂蜜黑糖粉粿", price: 15 },
+  { name: "荔荔椰果", price: 15 }
 ];
-
-
-/* =====================================================
-   預設菜單
-===================================================== */
 
 const defaultMenu = [
-
   {
-    category: "季節限定",
-
+    category: "熱銷推薦",
     items: [
-
-      {
-        name: "荔荔茉莉",
-        M: 50,
-        L: 60
-      },
-
-      {
-        name: "荔荔蜜桃椰果",
-        M: 65,
-        L: 75
-      },
-
-      {
-        name: "荔多鮮奶果昔",
-        M: 60,
-        L: 70
-      },
-
-      {
-        name: "蜜桃茉莉",
-        M: 70,
-        L: 80
-      },
-
-      {
-        name: "夏嶼果茶",
-        M: 65,
-        L: 75
-      },
-
-      {
-        name: "海鹽芒果綠",
-        M: 65,
-        L: 75
-      },
-
-      {
-        name: "蔗杯紅柚凍飲",
-        M: 75,
-        L: 85
-      }
-
-    ]
-  },
-
-
-  {
-    category: "醇萃茶",
-
-    items: [
-
-      {
-        name: "蘭韻金萱",
-        M: 45,
-        L: 55
-      },
-
-      {
-        name: "慕斯蘭韻金萱",
-        M: 55,
-        L: 65
-      },
-
-      {
-        name: "娜杯紅茶",
-        M: 40,
-        L: 50
-      },
-
-      {
-        name: "英倫伯爵紅茶",
-        M: 35,
-        L: 45
-      },
-
-      {
-        name: "大正醇香紅茶",
-        M: 35,
-        L: 45
-      },
-
-      {
-        name: "原片初露青茶",
-        M: 35,
-        L: 45
-      },
-
-      {
-        name: "茉莉原淬綠茶",
-        M: 35,
-        L: 45
-      }
-
-    ]
-  },
-
-
-  {
-    category: "鮮調果茶",
-
-    items: [
-
-      {
-        name: "桂香原片青",
-        M: 50,
-        L: 60
-      },
-
-      {
-        name: "桂香青梅蜂蜜粉粿",
-        M: 65,
-        L: 75
-      },
-
-      {
-        name: "柳丁綠茶／青茶",
-        M: 65,
-        L: 75
-      },
-
-      {
-        name: "白甘蔗青茶",
-        M: 70,
-        L: 80
-      },
-
-      {
-        name: "青梅香茶",
-        M: 70,
-        L: 80
-      },
-
-      {
-        name: "蜂蜜檸檬晶凍",
-        M: 60,
-        L: 70
-      },
-
-      {
-        name: "香柚綠茶",
-        M: 60,
-        L: 70
-      },
-
-      {
-        name: "養樂多多綠",
-        M: 55,
-        L: 65
-      },
-
-      {
-        name: "冬瓜青茶",
-        M: 55,
-        L: 65
-      },
-
-      {
-        name: "冰萃柳丁／檸檬",
-        M: 65,
-        L: 75
-      }
-
-    ]
-  },
-
-
-  {
-    category: "醇濃鮮奶茶",
-
-    items: [
-
-      {
-        name: "蘭韻金萱拿鐵",
-        M: 65,
-        L: 85
-      },
-
-      {
-        name: "慕斯金萱拿鐵",
-        M: 75,
-        L: 85
-      },
-
-      {
-        name: "娜杯紅茶拿鐵",
-        M: 55,
-        L: 65
-      },
-
-      {
-        name: "伯爵紅茶拿鐵",
-        M: 50,
-        L: 60
-      },
-
-      {
-        name: "大正紅茶拿鐵",
-        M: 50,
-        L: 60
-      },
-
-      {
-        name: "茉香綠茶拿鐵",
-        M: 50,
-        L: 60
-      },
-
-      {
-        name: "原片青茶拿鐵",
-        M: 50,
-        L: 60
-      },
-
-      {
-        name: "珍珠紅茶拿鐵（伯爵／大正）",
-        M: 60,
-        L: 70
-      },
-
-      {
-        name: "珍珠娜杯紅茶拿鐵",
-        M: 65,
-        L: 75
-      }
-
-    ]
-  },
-
-
-  {
-    category: "無咖啡因",
-
-    items: [
-
-      {
-        name: "桂香輕蕎麥",
-        M: 55,
-        L: 65
-      },
-
-      {
-        name: "輕鐵蕎麥茶",
-        M: 45,
-        L: 55
-      },
-
-      {
-        name: "輕鐵蕎麥拿鐵",
-        M: 65,
-        L: 75
-      },
-
-      {
-        name: "焙香決明大麥",
-        M: 35,
-        L: 45
-      },
-
-      {
-        name: "焙香大麥拿鐵",
-        M: 50,
-        L: 60
-      },
-
-      {
-        name: "原鄉冬瓜茶",
-        M: 40,
-        L: 50
-      },
-
-      {
-        name: "冬瓜檸檬／麥茶",
-        M: 55,
-        L: 65
-      }
-
-    ]
-  },
-
-
-  {
-    category: "醇濃綠光鮮奶",
-
-    items: [
-
-      {
-        name: "芋頭鮮奶",
-        M: 65,
-        L: 85
-      },
-
-      {
-        name: "珍珠鮮奶",
-        M: 65,
-        L: 85
-      },
-
-      {
-        name: "手炒黑糖鮮奶",
-        M: 65,
-        L: 85
-      },
-
-      {
-        name: "嫩仙草凍奶",
-        M: 65,
-        L: 85
-      },
-
-      {
-        name: "綠光純鮮奶家庭號",
-        M: 169,
-        L: 169
-      }
-
+      { name: "原片初露青茶", M: 35, L: 45 },
+      { name: "紅茶拿鐵", M: 50, L: 60 }
     ]
   }
-
 ];
 
+function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
+
+function toast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), 2000);
+}
 
 /* =====================================================
-   Firebase REST
+   Firebase REST API
 ===================================================== */
-
-function dbUrl(path) {
-
-  return DATABASE_URL +
-    "/" +
-    path +
-    ".json";
-
-}
-
+function dbUrl(path) { return DATABASE_URL + "/" + path + ".json"; }
 
 async function dbGet(path) {
-
-  const response =
-    await fetch(
-      dbUrl(path),
-      {
-        cache: "no-store"
-      }
-    );
-
-  if (!response.ok) {
-
-    throw new Error(
-      "Firebase 讀取失敗"
-    );
-
-  }
-
+  const response = await fetch(dbUrl(path), { cache: "no-store" });
+  if (!response.ok) throw new Error("Firebase 讀取失敗");
   return await response.json();
-
 }
-
 
 async function dbPut(path, value) {
-
-  const response =
-    await fetch(
-      dbUrl(path),
-      {
-        method: "PUT",
-
-        headers: {
-          "Content-Type":
-            "application/json"
-        },
-
-        body:
-          JSON.stringify(value)
-      }
-    );
-
-  if (!response.ok) {
-
-    throw new Error(
-      "Firebase 寫入失敗"
-    );
-
-  }
-
+  const response = await fetch(dbUrl(path), {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(value)
+  });
+  if (!response.ok) throw new Error("Firebase 寫入失敗");
   return await response.json();
-
 }
-
 
 async function dbPatch(path, value) {
-
-  const response =
-    await fetch(
-      dbUrl(path),
-      {
-        method: "PATCH",
-
-        headers: {
-          "Content-Type":
-            "application/json"
-        },
-
-        body:
-          JSON.stringify(value)
-      }
-    );
-
-  if (!response.ok) {
-
-    throw new Error(
-      "Firebase 更新失敗"
-    );
-
-  }
-
+  const response = await fetch(dbUrl(path), {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(value)
+  });
+  if (!response.ok) throw new Error("Firebase 更新失敗");
   return await response.json();
-
 }
-
-
-async function dbDelete(path) {
-
-  const response =
-    await fetch(
-      dbUrl(path),
-      {
-        method: "DELETE"
-      }
-    );
-
-  if (!response.ok) {
-
-    throw new Error(
-      "Firebase 刪除失敗"
-    );
-
-  }
-
-}
-
 
 /* =====================================================
    初始化
 ===================================================== */
+document.addEventListener("DOMContentLoaded", async function() {
+  const today = new Date();
+  currentDate = today.getFullYear() + "-" +
+    String(today.getMonth() + 1).padStart(2, "0") + "-" +
+    String(today.getDate()).padStart(2, "0");
 
-document.addEventListener(
-  "DOMContentLoaded",
-  async function() {
+  document.getElementById("orderDate").value = currentDate;
+  document.getElementById("orderDate").addEventListener("change", changeDate);
+  document.getElementById("shopName").addEventListener("change", saveShop);
+  document.getElementById("menuImage").addEventListener("change", previewImage);
+  document.getElementById("drinkSelect").addEventListener("change", updatePrice);
+  document.getElementById("sizeSelect").addEventListener("change", updatePrice);
 
-    const today =
-      new Date();
-
-    currentDate =
-      today.getFullYear() +
-      "-" +
-      String(
-        today.getMonth() + 1
-      ).padStart(2, "0") +
-      "-" +
-      String(
-        today.getDate()
-      ).padStart(2, "0");
-
-
-    document
-      .getElementById("orderDate")
-      .value =
-      currentDate;
-
-
-    document
-      .getElementById("orderDate")
-      .addEventListener(
-        "change",
-        changeDate
-      );
-
-
-    document
-      .getElementById("shopName")
-      .addEventListener(
-        "change",
-        saveShop
-      );
-
-
-    document
-      .getElementById("menuImage")
-      .addEventListener(
-        "change",
-        previewImage
-      );
-
-
-    document
-      .getElementById("drinkSelect")
-      .addEventListener(
-        "change",
-        updatePrice
-      );
-
-
-    document
-      .getElementById("sizeSelect")
-      .addEventListener(
-        "change",
-        updatePrice
-      );
-
-
-    renderToppings();
-
-    await loadToday();
-
-    await loadPeopleFromFirebase();
-
-    startSync();
-
-  }
-);
-
+  renderToppings();
+  await loadToday();
+  await loadPeopleFromFirebase();
+  startSync();
+});
 
 /* =====================================================
-   載入今日資料
+   核心資料處理
 ===================================================== */
-
 async function loadToday() {
-
   try {
-
-    const result =
-      await dbGet(
-        "drinkOrders/" +
-        currentDate
-      );
-
-
+    const result = await dbGet("drinkOrders/" + currentDate);
     if (result) {
-
-      data.shopName =
-        result.shopName ||
-        "";
-
-      data.isOpen =
-        result.isOpen !== false;
-
-      data.menu =
-        result.menu ||
-        clone(defaultMenu);
-
-      data.orders =
-        result.orders ||
-        {};
-
-    }
-
-    else {
-
+      data.shopName = result.shopName || "";
+      data.isOpen = result.isOpen !== false;
+      data.menu = result.menu || clone(defaultMenu);
+      data.orders = result.orders || {};
+    } else {
       data.shopName = "";
-
       data.isOpen = true;
-
-      data.menu =
-        clone(defaultMenu);
-
+      data.menu = clone(defaultMenu);
       data.orders = {};
-
-
-      await dbPut(
-        "drinkOrders/" +
-        currentDate,
-
-        {
-          shopName: "",
-          isOpen: true,
-          menu: data.menu
-        }
-      );
-
+      await dbPut("drinkOrders/" + currentDate, {
+        shopName: "", isOpen: true, menu: data.menu
+      });
     }
-
-
-    document
-      .getElementById("shopName")
-      .value =
-      data.shopName;
-
-
+    document.getElementById("shopName").value = data.shopName;
     renderAll();
-
-
-    document
-      .getElementById(
-        "firebaseStatus"
-      )
-      .textContent =
-      "已連線";
-
-
-  }
-
-  catch(error) {
-
+    document.getElementById("firebaseStatus").textContent = "已連線";
+  } catch(error) {
     console.error(error);
-
-    document
-      .getElementById(
-        "firebaseStatus"
-      )
-      .textContent =
-      "連線失敗";
-
+    document.getElementById("firebaseStatus").textContent = "連線失敗";
   }
-
 }
-
-
-/* =====================================================
-   即時同步
-===================================================== */
 
 function startSync() {
-
-  setInterval(
-    async function() {
-
-      try {
-
-        const result =
-          await dbGet(
-            "drinkOrders/" +
-            currentDate +
-            "/orders"
-          );
-
-
-        data.orders =
-          result || {};
-
-
-        renderOrders();
-
-
-        document
-          .getElementById(
-            "lastSync"
-          )
-          .textContent =
-          new Date()
-            .toLocaleTimeString();
-
-
-        document
-          .getElementById(
-            "firebaseStatus"
-          )
-          .textContent =
-          "已連線";
-
-      }
-
-      catch(error) {
-
-        document
-          .getElementById(
-            "firebaseStatus"
-          )
-          .textContent =
-          "同步失敗";
-
-      }
-
-    },
-    1500
-  );
-
+  setInterval(async function() {
+    try {
+      const result = await dbGet("drinkOrders/" + currentDate + "/orders");
+      data.orders = result || {};
+      renderOrders();
+      document.getElementById("lastSync").textContent = new Date().toLocaleTimeString();
+      document.getElementById("firebaseStatus").textContent = "已連線";
+    } catch(error) {
+      document.getElementById("firebaseStatus").textContent = "同步失敗";
+    }
+  }, 3000);
 }
-
-
-/* =====================================================
-   日期
-===================================================== */
 
 async function changeDate() {
-
-  currentDate =
-    document
-      .getElementById(
-        "orderDate"
-      )
-      .value;
-
-
+  currentDate = document.getElementById("orderDate").value;
   if (!currentDate) return;
-
-
   await loadToday();
-
 }
-
-
-/* =====================================================
-   店家
-===================================================== */
 
 async function saveShop() {
-
-  data.shopName =
-    document
-      .getElementById(
-        "shopName"
-      )
-      .value
-      .trim();
-
-
+  data.shopName = document.getElementById("shopName").value.trim();
   try {
-
-    await dbPatch(
-      "drinkOrders/" +
-      currentDate,
-
-      {
-        shopName:
-          data.shopName
-      }
-    );
-
-    toast(
-      "店家名稱已更新"
-    );
-
+    await dbPatch("drinkOrders/" + currentDate, { shopName: data.shopName });
+    toast("店家名稱已更新");
+  } catch(error) {
+    alert("無法儲存店家名稱");
   }
-
-  catch(error) {
-
-    alert(
-      "無法儲存店家名稱"
-    );
-
-  }
-
 }
-
-
-/* =====================================================
-   圖片預覽
-===================================================== */
 
 function previewImage(event) {
-
-  const file =
-    event.target.files[0];
-
+  const file = event.target.files[0];
   if (!file) return;
-
-
-  const reader =
-    new FileReader();
-
-
-  reader.onload =
-    function(e) {
-
-      const image =
-        document
-          .getElementById(
-            "menuPreview"
-          );
-
-
-      image.src =
-        e.target.result;
-
-
-      image.style.display =
-        "block";
-
-    };
-
-
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const image = document.getElementById("menuPreview");
+    image.src = e.target.result;
+    image.style.display = "block";
+  };
   reader.readAsDataURL(file);
-
 }
 
-
 /* =====================================================
-   OCR
+   修正後的 AI 菜單 OCR 辨識邏輯
 ===================================================== */
-
 async function runOCR() {
-
-  const file =
-    document
-      .getElementById(
-        "menuImage"
-      )
-      .files[0];
-
+  const fileInput = document.getElementById("menuImage");
+  const file = fileInput.files[0];
 
   if (!file) {
-
-    alert(
-      "請先選擇菜單圖片。"
-    );
-
+    alert("請先選擇菜單圖片。");
     return;
-
   }
 
+  const status = document.getElementById("ocrStatus");
+  const result = document.getElementById("ocrResult");
 
-  const status =
-    document
-      .getElementById(
-        "ocrStatus"
-      );
-
-
-  const result =
-    document
-      .getElementById(
-        "ocrResult"
-      );
-
-
-  status.classList.remove(
-    "hidden"
-  );
-
-
-  result.classList.remove(
-    "hidden"
-  );
-
-
-  status.textContent =
-    "🤖 正在辨識菜單，請稍候……";
-
-
-  result.textContent =
-    "";
-
+  status.classList.remove("hidden");
+  result.classList.remove("hidden");
+  status.textContent = "🤖 正在下載 AI 語言包並辨識菜單，請稍候……";
+  result.textContent = "";
 
   try {
+    // 修正 Tesseract.js v5 辨識呼叫
+    const worker = await Tesseract.createWorker("chi_tra+eng");
+    const output = await worker.recognize(file);
+    const text = output.data.text;
 
-    const worker =
-      await Tesseract.createWorker(
-        "chi_tra+eng"
-      );
-
-
-    const output =
-      await worker.recognize(
-        file
-      );
-
-
-    const text =
-      output.data.text;
-
-
-    result.textContent =
-      text;
-
-
+    result.textContent = text;
     await worker.terminate();
 
-
-    status.textContent =
-      "✅ OCR 辨識完成。請檢查下方文字，再使用「編輯今日菜單」修正菜單。";
-
-
-  }
-
-  catch(error) {
-
-    console.error(error);
-
-    status.textContent =
-      "❌ 辨識失敗，請重新上傳圖片。";
-
-  }
-
-}
-
-
-/* =====================================================
-   發布菜單
-===================================================== */
-
-async function publishMenu() {
-
-  data.shopName =
-    document
-      .getElementById(
-        "shopName"
-      )
-      .value
-      .trim();
-
-
-  if (!data.shopName) {
-
-    alert(
-      "請先輸入店家名稱。"
-    );
-
-    return;
-
-  }
-
-
-  try {
-
-    await dbPatch(
-      "drinkOrders/" +
-      currentDate,
-
-      {
-        shopName:
-          data.shopName,
-
-        menu:
-          data.menu
-      }
-    );
-
-
-    toast(
-      "✅ 今日菜單已發布"
-    );
-
-
-    renderDrinkSelect();
-
-
-  }
-
-  catch(error) {
-
-    alert(
-      "菜單發布失敗。"
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   菜單編輯器
-===================================================== */
-
-function toggleEditor() {
-
-  const editor =
-    document
-      .getElementById(
-        "menuEditor"
-      );
-
-
-  editor.classList.toggle(
-    "hidden"
-  );
-
-
-  if (
-    !editor.classList.contains(
-      "hidden"
-    )
-  ) {
-
-    renderEditor();
-
-  }
-
-}
-
-
-function renderEditor() {
-
-  const container =
-    document
-      .getElementById(
-        "editorContainer"
-      );
-
-
-  container.innerHTML =
-    "";
-
-
-  data.menu.forEach(
-    function(category, ci) {
-
-      const box =
-        document.createElement(
-          "div"
-        );
-
-
-      box.className =
-        "category-editor";
-
-
-      const header =
-        document.createElement(
-          "div"
-        );
-
-
-      header.className =
-        "category-header";
-
-
-      const input =
-        document.createElement(
-          "input"
-        );
-
-
-      input.value =
-        category.category;
-
-
-      input.onchange =
-        function() {
-
-          category.category =
-            input.value;
-
-        };
-
-
-      const del =
-        document.createElement(
-          "button"
-        );
-
-
-      del.className =
-        "red small";
-
-
-      del.textContent =
-        "刪除分類";
-
-
-      del.onclick =
-        function() {
-
-          data.menu.splice(
-            ci,
-            1
-          );
-
-          renderEditor();
-
-        };
-
-
-      header.appendChild(
-        input
-      );
-
-
-      header.appendChild(
-        del
-      );
-
-
-      box.appendChild(
-        header
-      );
-
-
-      category.items.forEach(
-        function(item, ii) {
-
-          const row =
-            document.createElement(
-              "div"
-            );
-
-
-          row.className =
-            "drink-editor";
-
-
-          const name =
-            document.createElement(
-              "input"
-            );
-
-
-          name.value =
-            item.name;
-
-
-          name.onchange =
-            function() {
-
-              item.name =
-                name.value;
-
-            };
-
-
-          const m =
-            document.createElement(
-              "input"
-            );
-
-
-          m.type =
-            "number";
-
-
-          m.value =
-            item.M;
-
-
-          m.onchange =
-            function() {
-
-              item.M =
-                Number(m.value) || 0;
-
-            };
-
-
-          const l =
-            document.createElement(
-              "input"
-            );
-
-
-          l.type =
-            "number";
-
-
-          l.value =
-            item.L;
-
-
-          l.onchange =
-            function() {
-
-              item.L =
-                Number(l.value) || 0;
-
-            };
-
-
-          const remove =
-            document.createElement(
-              "button"
-            );
-
-
-          remove.className =
-            "red small";
-
-
-          remove.textContent =
-            "×";
-
-
-          remove.onclick =
-            function() {
-
-              category.items.splice(
-                ii,
-                1
-              );
-
-              renderEditor();
-
-            };
-
-
-          row.appendChild(
-            name
-          );
-
-          row.appendChild(
-            m
-          );
-
-          row.appendChild(
-            l
-          );
-
-          row.appendChild(
-            remove
-          );
-
-
-          box.appendChild(
-            row
-          );
-
-        }
-      );
-
-
-      const add =
-        document.createElement(
-          "button"
-        );
-
-
-      add.className =
-        "gray small";
-
-
-      add.textContent =
-        "＋ 新增飲料";
-
-
-      add.onclick =
-        function() {
-
-          category.items.push({
-
-            name: "新飲料",
-
-            M: 50,
-
-            L: 60
-
-          });
-
-
-          renderEditor();
-
-        };
-
-
-      box.appendChild(
-        add
-      );
-
-
-      container.appendChild(
-        box
-      );
-
+    // 解析文字並自動建構菜單
+    const parsedMenu = parseOCRTextToMenu(text);
+    if (parsedMenu.length > 0) {
+      data.menu = parsedMenu;
+      renderDrinkSelect();
+      renderEditor();
+      status.textContent = "✅ OCR 辨識成功！已自動轉為菜單，可至「編輯今日菜單」做微調。";
+    } else {
+      status.textContent = "⚠️ 辨識完成，但未能自動解析格式。請參考下方文字手動新增菜單。";
     }
-  );
 
+  } catch (error) {
+    console.error(error);
+    status.textContent = "❌ 辨識失敗，請確定網路連線或嘗試其他照片。";
+  }
 }
 
+// 將 OCR 文字轉為結構化菜單資料
+function parseOCRTextToMenu(text) {
+  const lines = text.split("\n");
+  const categories = [];
+  let currentCategory = { category: "辨識品項", items: [] };
 
-function addCategory() {
+  lines.forEach(line => {
+    let clean = line.trim();
+    if (!clean) return;
 
-  data.menu.push({
+    // 尋找品項名稱與價格數字 (例: 綠茶 35 45 或 奶茶 50)
+    const matches = clean.match(/^([^\d]+)\s*(\d+)\s*(\d+)?$/);
+    if (matches) {
+      const name = matches[1].trim();
+      const price1 = parseInt(matches[2], 10);
+      const price2 = matches[3] ? parseInt(matches[3], 10) : price1;
 
-    category: "新分類",
-
-    items: [
-
-      {
-        name: "新飲料",
-        M: 50,
-        L: 60
+      if (name.length >= 2) {
+        currentCategory.items.push({
+          name: name,
+          M: price1,
+          L: price2
+        });
       }
-
-    ]
-
+    }
   });
 
+  if (currentCategory.items.length > 0) {
+    categories.push(currentCategory);
+  }
 
+  return categories;
+}
+
+/* =====================================================
+   發布與編輯菜單
+===================================================== */
+async function publishMenu() {
+  data.shopName = document.getElementById("shopName").value.trim();
+  if (!data.shopName) {
+    alert("請先輸入店家名稱。");
+    return;
+  }
+  try {
+    await dbPatch("drinkOrders/" + currentDate, {
+      shopName: data.shopName,
+      menu: data.menu
+    });
+    toast("✅ 今日菜單已發布");
+    renderDrinkSelect();
+  } catch(error) {
+    alert("菜單發布失敗。");
+  }
+}
+
+function toggleEditor() {
+  const editor = document.getElementById("menuEditor");
+  editor.classList.toggle("hidden");
+  if (!editor.classList.contains("hidden")) {
+    renderEditor();
+  }
+}
+
+function renderEditor() {
+  const container = document.getElementById("editorContainer");
+  container.innerHTML = "";
+
+  data.menu.forEach((category, ci) => {
+    const box = document.createElement("div");
+    box.className = "category-editor";
+
+    const header = document.createElement("div");
+    header.className = "category-header";
+
+    const input = document.createElement("input");
+    input.value = category.category;
+    input.onchange = () => { category.category = input.value; };
+
+    const del = document.createElement("button");
+    del.className = "red small";
+    del.textContent = "刪除分類";
+    del.onclick = () => { data.menu.splice(ci, 1); renderEditor(); };
+
+    header.appendChild(input);
+    header.appendChild(del);
+    box.appendChild(header);
+
+    category.items.forEach((item, ii) => {
+      const row = document.createElement("div");
+      row.className = "drink-editor";
+
+      const name = document.createElement("input");
+      name.value = item.name;
+      name.onchange = () => { item.name = name.value; };
+
+      const m = document.createElement("input");
+      m.type = "number"; m.value = item.M;
+      m.onchange = () => { item.M = Number(m.value) || 0; };
+
+      const l = document.createElement("input");
+      l.type = "number"; l.value = item.L;
+      l.onchange = () => { item.L = Number(l.value) || 0; };
+
+      const remove = document.createElement("button");
+      remove.className = "red small";
+      remove.textContent = "×";
+      remove.onclick = () => { category.items.splice(ii, 1); renderEditor(); };
+
+      row.appendChild(name);
+      row.appendChild(m);
+      row.appendChild(l);
+      row.appendChild(remove);
+      box.appendChild(row);
+    });
+
+    const add = document.createElement("button");
+    add.className = "gray small";
+    add.textContent = "＋ 新增飲料";
+    add.onclick = () => {
+      category.items.push({ name: "新飲料", M: 50, L: 60 });
+      renderEditor();
+    };
+
+    box.appendChild(add);
+    container.appendChild(box);
+  });
+}
+
+function addCategory() {
+  data.menu.push({ category: "新分類", items: [{ name: "新飲料", M: 50, L: 60 }] });
   renderEditor();
-
 }
 
-
-/* =====================================================
-   飲料選單
-===================================================== */
-
-function renderDrinkSelect() {
-
-  const select =
-    document
-      .getElementById(
-        "drinkSelect"
-      );
-
-
-  select.innerHTML =
-    "";
-
-
-  data.menu.forEach(
-    function(category) {
-
-      const group =
-        document.createElement(
-          "optgroup"
-        );
-
-
-      group.label =
-        category.category;
-
-
-      category.items.forEach(
-        function(item) {
-
-          const option =
-            document.createElement(
-              "option"
-            );
-
-
-          option.value =
-            JSON.stringify({
-
-              name:
-                item.name,
-
-              M:
-                Number(item.M) || 0,
-
-              L:
-                Number(item.L) || 0
-
-            });
-
-
-          option.textContent =
-            item.name +
-            "（M $" +
-            item.M +
-            "／L $" +
-            item.L +
-            "）";
-
-
-          group.appendChild(
-            option
-          );
-
-        }
-      );
-
-
-      select.appendChild(
-        group
-      );
-
-    }
-  );
-
-
-  updatePrice();
-
-}
-
-
-/* =====================================================
-   加料
-===================================================== */
-
-function renderToppings() {
-
-  const container =
-    document
-      .getElementById(
-        "toppingList"
-      );
-
-
-  container.innerHTML =
-    "";
-
-
-  toppings.forEach(
-    function(topping, index) {
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-
-      button.className =
-        "person-btn small";
-
-
-      button.textContent =
-        topping.name +
-        " +$" +
-        topping.price;
-
-
-      button.onclick =
-        function() {
-
-          if (
-            selectedToppings
-              .includes(index)
-          ) {
-
-            selectedToppings =
-              selectedToppings
-                .filter(
-                  function(i) {
-                    return i !== index;
-                  }
-                );
-
-
-            button.classList.remove(
-              "selected"
-            );
-
-          }
-
-          else {
-
-            selectedToppings.push(
-              index
-            );
-
-
-            button.classList.add(
-              "selected"
-            );
-
-          }
-
-
-          updatePrice();
-
-        };
-
-
-      container.appendChild(
-        button
-      );
-
-    }
-  );
-
-}
-
-
-/* =====================================================
-   價格
-===================================================== */
-
-function getCurrentPrice() {
-
-  const value =
-    document
-      .getElementById(
-        "drinkSelect"
-      )
-      .value;
-
-
-  if (!value) return 0;
-
-
-  const drink =
-    JSON.parse(value);
-
-
-  const size =
-    document
-      .getElementById(
-        "sizeSelect"
-      )
-      .value;
-
-
-  let price =
-    Number(
-      drink[size]
-    ) || 0;
-
-
-  selectedToppings.forEach(
-    function(index) {
-
-      price +=
-        toppings[index].price;
-
-    }
-  );
-
-
-  return price;
-
-}
-
-
-function updatePrice() {
-
-  document
-    .getElementById(
-      "currentPrice"
-    )
-    .textContent =
-    "$" +
-    getCurrentPrice();
-
-}
-
-
-/* =====================================================
-   Firebase 共用人員
-===================================================== */
-
-async function loadPeopleFromFirebase() {
-
-  const container =
-    document
-      .getElementById(
-        "peopleList"
-      );
-
-
+async function setOrderStatus(isOpen) {
+  data.isOpen = isOpen;
   try {
-
-    const result =
-      await dbGet(
-        "drinkOrderPeople"
-      );
-
-
-    const people =
-      result || {};
-
-
-    container.innerHTML =
-      "";
-
-
-    const names =
-      Object.entries(
-        people
-      );
-
-
-    if (!names.length) {
-
-      container.innerHTML =
-        `
-        <div style="color:#999;">
-          還沒有訂購人。
-        </div>
-        `;
-
-      return;
-
-    }
-
-
-    names.forEach(
-      function([id, person]) {
-
-        const button =
-          document.createElement(
-            "button"
-          );
-
-
-        button.className =
-          "person-btn";
-
-
-        if (
-          selectedName ===
-          person.name
-        ) {
-
-          button.classList.add(
-            "selected"
-          );
-
-        }
-
-
-        button.textContent =
-          person.name;
-
-
-        button.onclick =
-          function() {
-
-            selectedName =
-              person.name;
-
-
-            renderPeople(people);
-
-          };
-
-
-        button.oncontextmenu =
-          async function(event) {
-
-            event.preventDefault();
-
-
-            if (
-              confirm(
-                "確定要刪除「" +
-                person.name +
-                "」嗎？"
-              )
-            ) {
-
-              await dbDelete(
-                "drinkOrderPeople/" +
-                id
-              );
-
-
-              loadPeopleFromFirebase();
-
-            }
-
-          };
-
-
-        container.appendChild(
-          button
-        );
-
-      }
-    );
-
+    await dbPatch("drinkOrders/" + currentDate, { isOpen: isOpen });
+    renderOrderStatus();
+    toast(isOpen ? "已開啟訂購" : "已關閉訂購");
+  } catch(e) {
+    alert("更新狀態失敗");
   }
-
-  catch(error) {
-
-    container.innerHTML =
-      `
-      <div style="color:#c44;">
-        無法讀取共用名單
-      </div>
-      `;
-
-  }
-
 }
-
-
-/*
-  用這個函式只是為了重新畫面。
-*/
-
-function renderPeople(people) {
-
-  const container =
-    document
-      .getElementById(
-        "peopleList"
-      );
-
-
-  container.innerHTML =
-    "";
-
-
-  Object.entries(
-    people
-  ).forEach(
-    function([id, person]) {
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-
-      button.className =
-        "person-btn";
-
-
-      if (
-        selectedName ===
-        person.name
-      ) {
-
-        button.classList.add(
-          "selected"
-        );
-
-      }
-
-
-      button.textContent =
-        person.name;
-
-
-      button.onclick =
-        function() {
-
-          selectedName =
-            person.name;
-
-
-          loadPeopleFromFirebase();
-
-        };
-
-
-      container.appendChild(
-        button
-      );
-
-    }
-  );
-
-}
-
-
-async function addPerson() {
-
-  const input =
-    document
-      .getElementById(
-        "newPerson"
-      );
-
-
-  const name =
-    input.value.trim();
-
-
-  if (!name) {
-
-    alert(
-      "請輸入姓名。"
-    );
-
-    return;
-
-  }
-
-
-  const people =
-    await dbGet(
-      "drinkOrderPeople"
-    ) || {};
-
-
-  const exists =
-    Object.values(
-      people
-    ).some(
-      function(person) {
-        return person.name === name;
-      }
-    );
-
-
-  if (exists) {
-
-    alert(
-      "這個名字已經存在。"
-    );
-
-    return;
-
-  }
-
-
-  const id =
-    "person_" +
-    Date.now();
-
-
-  await dbPut(
-    "drinkOrderPeople/" +
-    id,
-
-    {
-      name: name,
-
-      createdAt:
-        new Date().toISOString()
-    }
-  );
-
-
-  input.value =
-    "";
-
-
-  selectedName =
-    name;
-
-
-  await loadPeopleFromFirebase();
-
-
-  toast(
-    "✅ 已新增 " +
-    name
-  );
-
-}
-
 
 /* =====================================================
-   昨日訂購者
+   渲染畫面邏輯
 ===================================================== */
-
-async function useYesterdayPeople() {
-
-  const yesterday =
-    new Date(
-      currentDate +
-      "T00:00:00"
-    );
-
-
-  yesterday.setDate(
-    yesterday.getDate() - 1
-  );
-
-
-  const date =
-    yesterday.getFullYear() +
-    "-" +
-    String(
-      yesterday.getMonth() + 1
-    ).padStart(2, "0") +
-    "-" +
-    String(
-      yesterday.getDate()
-    ).padStart(2, "0");
-
-
-  try {
-
-    const orders =
-      await dbGet(
-        "drinkOrders/" +
-        date +
-        "/orders"
-      );
-
-
-    if (!orders) {
-
-      alert(
-        "昨天沒有訂單。"
-      );
-
-      return;
-
-    }
-
-
-    const names =
-      [
-        ...new Set(
-          Object.values(
-            orders
-          )
-          .map(
-            function(order) {
-              return order.name;
-            }
-          )
-        )
-      ];
-
-
-    for (
-      const name of names
-    ) {
-
-      const people =
-        await dbGet(
-          "drinkOrderPeople"
-        ) || {};
-
-
-      const exists =
-        Object.values(
-          people
-        ).some(
-          function(person) {
-            return person.name === name;
-          }
-        );
-
-
-      if (!exists) {
-
-        await dbPut(
-          "drinkOrderPeople/person_" +
-          Date.now() +
-          "_" +
-          Math.random()
-            .toString(36)
-            .substring(2, 7),
-
-          {
-            name: name,
-
-            createdAt:
-              new Date().toISOString()
-          }
-        );
-
-      }
-
-    }
-
-
-    await loadPeopleFromFirebase();
-
-
-    toast(
-      "✅ 已沿用昨天訂購者"
-    );
-
-  }
-
-  catch(error) {
-
-    alert(
-      "讀取昨天訂單失敗。"
-    );
-
-  }
-
+function renderAll() {
+  renderOrderStatus();
+  renderDrinkSelect();
+  renderPeople();
+  renderOrders();
 }
 
-
-/* =====================================================
-   新增訂單
-===================================================== */
-
-async function addOrder() {
-
-  if (!data.isOpen) {
-
-    alert(
-      "目前已關閉訂購。"
-    );
-
-    return;
-
-  }
-
-
-  if (!selectedName) {
-
-    alert(
-      "請先選擇姓名。"
-    );
-
-    return;
-
-  }
-
-
-  const value =
-    document
-      .getElementById(
-        "drinkSelect"
-      )
-      .value;
-
-
-  if (!value) {
-
-    alert(
-      "請先選擇飲料。"
-    );
-
-    return;
-
-  }
-
-
-  const drink =
-    JSON.parse(value);
-
-
-  const size =
-    document
-      .getElementById(
-        "sizeSelect"
-      )
-      .value;
-
-
-  const sugar =
-    document
-      .getElementById(
-        "sugarSelect"
-      )
-      .value;
-
-
-  const ice =
-    document
-      .getElementById(
-        "iceSelect"
-      )
-      .value;
-
-
-  const toppingNames =
-    selectedToppings.map(
-      function(index) {
-        return toppings[index].name;
-      }
-    );
-
-
-  const price =
-    getCurrentPrice();
-
-
-  /*
-    每筆訂單都有自己的 ID。
-
-    這是這一版很重要的修改。
-
-    A 點餐與 B 點餐同時發生，
-    不會互相覆蓋。
-  */
-
-  const orderId =
-    "order_" +
-    Date.now() +
-    "_" +
-    Math.random()
-      .toString(36)
-      .substring(2, 9);
-
-
-  const order = {
-
-    name:
-      selectedName,
-
-    drink:
-      drink.name,
-
-    size:
-      size,
-
-    sugar:
-      sugar,
-
-    ice:
-      ice,
-
-    toppings:
-      toppingNames,
-
-    price:
-      price,
-
-    createdAt:
-      new Date().toISOString()
-
-  };
-
-
-  try {
-
-    await dbPut(
-
-      "drinkOrders/" +
-      currentDate +
-      "/orders/" +
-      orderId,
-
-      order
-
-    );
-
-
-    /*
-      立即更新畫面
-    */
-
-    data.orders[orderId] =
-      order;
-
-
-    renderOrders();
-
-
-    toast(
-      "✅ 已加入 " +
-      selectedName +
-      " 的訂單"
-    );
-
-  }
-
-  catch(error) {
-
-    console.error(error);
-
-    alert(
-      "訂單加入失敗，請再試一次。"
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   刪除訂單
-===================================================== */
-
-async function deleteOrder(
-  orderId
-) {
-
-  if (
-    !confirm(
-      "確定要刪除這杯飲料嗎？"
-    )
-  ) {
-
-    return;
-
-  }
-
-
-  try {
-
-    await dbDelete(
-
-      "drinkOrders/" +
-      currentDate +
-      "/orders/" +
-      orderId
-
-    );
-
-
-    delete data.orders[
-      orderId
-    ];
-
-
-    renderOrders();
-
-
-    toast(
-      "🗑️ 已刪除訂單"
-    );
-
-  }
-
-  catch(error) {
-
-    alert(
-      "刪除失敗。"
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   訂單顯示
-===================================================== */
-
-function renderOrders() {
-
-  const container =
-    document
-      .getElementById(
-        "ordersContainer"
-      );
-
-
-  container.innerHTML =
-    "";
-
-
-  const orders =
-    Object.entries(
-      data.orders || {}
-    );
-
-
-  if (!orders.length) {
-
-    container.innerHTML =
-      `
-      <div style="
-        text-align:center;
-        color:#999;
-        padding:20px;
-      ">
-        目前還沒有人點餐。
-      </div>
-      `;
-
-
-    document
-      .getElementById(
-        "totalAmount"
-      )
-      .textContent =
-      "$0";
-
-
-    return;
-
-  }
-
-
-  const grouped = {};
-
-
-  let total =
-    0;
-
-
-  orders.forEach(
-    function([id, order]) {
-
-      if (
-        !grouped[
-          order.name
-        ]
-      ) {
-
-        grouped[
-          order.name
-        ] = [];
-
-      }
-
-
-      grouped[
-        order.name
-      ].push({
-
-        id: id,
-
-        ...order
-
-      });
-
-
-      total +=
-        Number(
-          order.price
-        ) || 0;
-
-    }
-  );
-
-
-  Object.entries(
-    grouped
-  ).forEach(
-    function([name, list]) {
-
-      const box =
-        document.createElement(
-          "div"
-        );
-
-
-      box.className =
-        "order-person";
-
-
-      const personTotal =
-        list.reduce(
-          function(sum, order) {
-
-            return sum +
-              Number(
-                order.price
-              ) || 0;
-
-          },
-          0
-        );
-
-
-      const header =
-        document.createElement(
-          "div"
-        );
-
-
-      header.className =
-        "person-header";
-
-
-      header.innerHTML =
-
-        "<span>" +
-        escapeHtml(name) +
-        "</span>" +
-
-        "<span>$" +
-        personTotal +
-        "</span>";
-
-
-      box.appendChild(
-        header
-      );
-
-
-      list.forEach(
-        function(order) {
-
-          const item =
-            document.createElement(
-              "div"
-            );
-
-
-          item.className =
-            "order-item";
-
-
-          let text =
-
-            escapeHtml(
-              order.drink
-            ) +
-
-            " ／ " +
-
-            escapeHtml(
-              order.size
-            ) +
-
-            " ／ " +
-
-            escapeHtml(
-              order.sugar
-            ) +
-
-            " ／ " +
-
-            escapeHtml(
-              order.ice
-            );
-
-
-          if (
-            order.toppings &&
-            order.toppings.length
-          ) {
-
-            text +=
-              "<br>加料：" +
-              escapeHtml(
-                order.toppings.join(
-                  "、"
-                )
-              );
-
-          }
-
-
-          text +=
-            "<br><strong>$" +
-            order.price +
-            "</strong>";
-
-
-          text +=
-            `
-            <div class="order-actions">
-              <button
-                class="red small"
-                onclick="deleteOrder('${order.id}')"
-              >
-                刪除
-              </button>
-            </div>
-            `;
-
-
-          item.innerHTML =
-            text;
-
-
-          box.appendChild(
-            item
-          );
-
-        }
-      );
-
-
-      container.appendChild(
-        box
-      );
-
-    }
-  );
-
-
-  document
-    .getElementById(
-      "totalAmount"
-    )
-    .textContent =
-    "$" +
-    total;
-
-}
-
-
-/* =====================================================
-   開團／關團
-===================================================== */
-
-async function setOrderStatus(
-  isOpen
-) {
-
-  data.isOpen =
-    isOpen;
-
-
-  try {
-
-    await dbPatch(
-
-      "drinkOrders/" +
-      currentDate,
-
-      {
-        isOpen:
-          isOpen
-      }
-
-    );
-
-
-    renderStatus();
-
-
-    toast(
-      isOpen
-        ? "🔓 已開始訂購"
-        : "🔒 已關閉訂購"
-    );
-
-  }
-
-  catch(error) {
-
-    alert(
-      "狀態更新失敗。"
-    );
-
-  }
-
-}
-
-
-function renderStatus() {
-
-  const badge =
-    document
-      .getElementById(
-        "statusBadge"
-      );
-
-
-  const form =
-    document
-      .getElementById(
-        "orderForm"
-      );
-
-
-  const closed =
-    document
-      .getElementById(
-        "closedMessage"
-      );
-
+function renderOrderStatus() {
+  const badge = document.getElementById("statusBadge");
+  const form = document.getElementById("orderForm");
+  const closedMsg = document.getElementById("closedMessage");
 
   if (data.isOpen) {
-
-    badge.className =
-      "status open";
-
-
-    badge.textContent =
-      "● 訂購中";
-
-
-    form.classList.remove(
-      "hidden"
-    );
-
-
-    closed.classList.add(
-      "hidden"
-    );
-
+    badge.className = "status open";
+    badge.textContent = "● 訂購中";
+    form.classList.remove("hidden");
+    closedMsg.classList.add("hidden");
+  } else {
+    badge.className = "status closed";
+    badge.textContent = "● 已關閉";
+    form.classList.add("hidden");
+    closedMsg.classList.remove("hidden");
   }
-
-  else {
-
-    badge.className =
-      "status closed";
-
-
-    badge.textContent =
-      "● 已關閉";
-
-
-    form.classList.add(
-      "hidden"
-    );
-
-
-    closed.classList.remove(
-      "hidden"
-    );
-
-  }
-
 }
 
+function renderDrinkSelect() {
+  const select = document.getElementById("drinkSelect");
+  select.innerHTML = "";
+
+  data.menu.forEach(category => {
+    const group = document.createElement("optgroup");
+    group.label = category.category;
+
+    category.items.forEach(item => {
+      const option = document.createElement("option");
+      option.value = JSON.stringify({ name: item.name, M: Number(item.M)||0, L: Number(item.L)||0 });
+      option.textContent = `${item.name}（M $${item.M} / L $${item.L}）`;
+      group.appendChild(option);
+    });
+    select.appendChild(group);
+  });
+
+  updatePrice();
+}
+
+function renderToppings() {
+  const container = document.getElementById("toppingList");
+  container.innerHTML = "";
+
+  toppings.forEach((topping, index) => {
+    const button = document.createElement("button");
+    button.className = "person-btn small";
+    button.textContent = `${topping.name} +$${topping.price}`;
+    button.onclick = () => {
+      if (selectedToppings.includes(index)) {
+        selectedToppings = selectedToppings.filter(i => i !== index);
+        button.classList.remove("selected");
+      } else {
+        selectedToppings.push(index);
+        button.classList.add("selected");
+      }
+      updatePrice();
+    };
+    container.appendChild(button);
+  });
+}
+
+function updatePrice() {
+  const drinkSelect = document.getElementById("drinkSelect");
+  if (!drinkSelect.value) return;
+
+  const drink = JSON.parse(drinkSelect.value);
+  const size = document.getElementById("sizeSelect").value;
+  let basePrice = size === "M" ? drink.M : drink.L;
+
+  let toppingPrice = selectedToppings.reduce((sum, index) => sum + toppings[index].price, 0);
+  const total = basePrice + toppingPrice;
+
+  document.getElementById("currentPrice").textContent = `$${total}`;
+}
 
 /* =====================================================
-   LINE
+   人員管理
 ===================================================== */
-
-function generateLineMessage() {
-
-  const orders =
-    Object.values(
-      data.orders || {}
-    );
-
-
-  if (!orders.length) {
-
-    alert(
-      "目前沒有訂單。"
-    );
-
-    return;
-
+async function loadPeopleFromFirebase() {
+  try {
+    const res = await dbGet("drinkPeople");
+    if (res) people = Array.isArray(res) ? res : Object.values(res);
+    renderPeople();
+  } catch(e) {
+    renderPeople();
   }
-
-
-  const grouped = {};
-
-
-  orders.forEach(
-    function(order) {
-
-      if (
-        !grouped[
-          order.name
-        ]
-      ) {
-
-        grouped[
-          order.name
-        ] = [];
-
-      }
-
-
-      grouped[
-        order.name
-      ].push(
-        order
-      );
-
-    }
-  );
-
-
-  let text = "";
-
-
-  text +=
-    "🥤 " +
-    data.shopName +
-    " 飲料團購\n";
-
-
-  text +=
-    "📅 " +
-    currentDate +
-    "\n\n";
-
-
-  Object.entries(
-    grouped
-  ).forEach(
-    function([name, list]) {
-
-      const personTotal =
-        list.reduce(
-          function(sum, order) {
-
-            return sum +
-              Number(
-                order.price
-              ) || 0;
-
-          },
-          0
-        );
-
-
-      text +=
-        "【" +
-        name +
-        "】 $" +
-        personTotal +
-        "\n";
-
-
-      list.forEach(
-        function(order) {
-
-          text +=
-            "・" +
-            order.drink +
-            " " +
-            order.size +
-            "／" +
-            order.sugar +
-            "／" +
-            order.ice;
-
-
-          if (
-            order.toppings &&
-            order.toppings.length
-          ) {
-
-            text +=
-              "／加" +
-              order.toppings.join(
-                "、"
-              );
-
-          }
-
-
-          text +=
-            " $" +
-            order.price +
-            "\n";
-
-        }
-      );
-
-
-      text +=
-        "\n";
-
-    }
-  );
-
-
-  const total =
-    orders.reduce(
-      function(sum, order) {
-
-        return sum +
-          Number(
-            order.price
-          ) || 0;
-
-      },
-      0
-    );
-
-
-  text +=
-    "💰 總計：$" +
-    total;
-
-
-  document
-    .getElementById(
-      "lineMessage"
-    )
-    .value =
-    text;
-
 }
 
+function renderPeople() {
+  const container = document.getElementById("peopleList");
+  container.innerHTML = "";
 
-async function copyLineMessage() {
+  people.forEach(name => {
+    const btn = document.createElement("button");
+    btn.className = "person-btn" + (selectedName === name ? " selected" : "");
+    btn.textContent = name;
+    btn.onclick = () => {
+      selectedName = name;
+      renderPeople();
+    };
+    container.appendChild(btn);
+  });
+}
 
-  const textarea =
-    document
-      .getElementById(
-        "lineMessage"
-      );
+async function addPerson() {
+  const input = document.getElementById("newPerson");
+  const name = input.value.trim();
+  if (!name) return;
 
-
-  if (!textarea.value) {
-
-    generateLineMessage();
-
+  if (!people.includes(name)) {
+    people.push(name);
+    selectedName = name;
+    input.value = "";
+    renderPeople();
+    await dbPut("drinkPeople", people);
   }
+}
 
+async function useYesterdayPeople() {
+  const d = new Date(currentDate);
+  d.setDate(d.getDate() - 1);
+  const yesterdayStr = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
 
   try {
-
-    await navigator
-      .clipboard
-      .writeText(
-        textarea.value
-      );
-
-
-    toast(
-      "📋 已複製，可以貼到 LINE"
-    );
-
+    const yData = await dbGet("drinkOrders/" + yesterdayStr + "/orders");
+    if (yData) {
+      people = Object.keys(yData);
+      renderPeople();
+      toast("已載入昨天訂購者");
+    } else {
+      alert("找不到昨天的訂單資料");
+    }
+  } catch(e) {
+    alert("讀取昨天資料失敗");
   }
-
-  catch(error) {
-
-    textarea.select();
-
-    document.execCommand(
-      "copy"
-    );
-
-
-    toast(
-      "📋 已複製"
-    );
-
-  }
-
 }
-
 
 /* =====================================================
-   全部渲染
+   訂單管理
 ===================================================== */
+async function addOrder() {
+  if (!selectedName) {
+    alert("請先在上方點選你是「誰」！");
+    return;
+  }
 
-function renderAll() {
+  const drinkSelect = document.getElementById("drinkSelect");
+  if (!drinkSelect.value) return;
 
-  renderStatus();
+  const drink = JSON.parse(drinkSelect.value);
+  const size = document.getElementById("sizeSelect").value;
+  const sugar = document.getElementById("sugarSelect").value;
+  const ice = document.getElementById("iceSelect").value;
 
-  renderDrinkSelect();
+  const toppingNames = selectedToppings.map(i => toppings[i].name);
+  const toppingCost = selectedToppings.reduce((sum, i) => sum + toppings[i].price, 0);
+  const price = (size === "M" ? drink.M : drink.L) + toppingCost;
 
-  renderOrders();
+  const item = {
+    drink: drink.name,
+    size: size,
+    sugar: sugar,
+    ice: ice,
+    toppings: toppingNames,
+    price: price
+  };
 
+  if (!data.orders[selectedName]) {
+    data.orders[selectedName] = [];
+  }
+  data.orders[selectedName].push(item);
+
+  try {
+    await dbPut("drinkOrders/" + currentDate + "/orders", data.orders);
+    toast("已成功加入訂單！");
+    renderOrders();
+  } catch(e) {
+    alert("訂單送出失敗");
+  }
 }
 
+function renderOrders() {
+  const container = document.getElementById("ordersContainer");
+  container.innerHTML = "";
+
+  let total = 0;
+  const names = Object.keys(data.orders || {});
+
+  if (names.length === 0) {
+    container.innerHTML = `<div style="text-align:center;color:#999;padding:20px;">尚無訂單</div>`;
+    document.getElementById("totalAmount").textContent = "$0";
+    return;
+  }
+
+  names.forEach(name => {
+    const items = data.orders[name];
+    if (!items || items.length === 0) return;
+
+    const personDiv = document.createElement("div");
+    personDiv.className = "order-person";
+
+    let personTotal = 0;
+    let itemsHtml = "";
+
+    items.forEach((item, index) => {
+      personTotal += item.price;
+      total += item.price;
+
+      const toppingStr = item.toppings && item.toppings.length > 0 ? ` + ${item.toppings.join(",")}` : "";
+      itemsHtml += `
+        <div class="order-item">
+          <strong>${item.drink}</strong> (${item.size}) - ${item.sugar}/${item.ice}${toppingStr}
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+            <span class="price">$${item.price}</span>
+            <button class="red small" onclick="deleteOrderItem('${name}', ${index})">刪除</button>
+          </div>
+        </div>
+      `;
+    });
+
+    personDiv.innerHTML = `
+      <div class="person-header">
+        <span>${name}</span>
+        <span>小計: $${personTotal}</span>
+      </div>
+      ${itemsHtml}
+    `;
+    container.appendChild(personDiv);
+  });
+
+  document.getElementById("totalAmount").textContent = `$${total}`;
+}
+
+async function deleteOrderItem(name, index) {
+  if (data.orders[name]) {
+    data.orders[name].splice(index, 1);
+    if (data.orders[name].length === 0) {
+      delete data.orders[name];
+    }
+    await dbPut("drinkOrders/" + currentDate + "/orders", data.orders);
+    renderOrders();
+  }
+}
 
 /* =====================================================
-   工具
+   LINE 訊息匯出
 ===================================================== */
+function generateLineMessage() {
+  const shop = data.shopName || "飲料店";
+  let msg = `🥤 ${currentDate} ${shop} 訂購清單\n`;
+  msg += `------------------------\n`;
 
-function clone(value) {
+  let total = 0;
+  let count = 0;
 
-  return JSON.parse(
-    JSON.stringify(value)
-  );
+  Object.keys(data.orders || {}).forEach(name => {
+    const items = data.orders[name];
+    if (items && items.length > 0) {
+      msg += `【${name}】\n`;
+      items.forEach(item => {
+        const topStr = item.toppings.length > 0 ? ` +${item.toppings.join(",")}` : "";
+        msg += `  • ${item.drink} (${item.size}) ${item.sugar}/${item.ice}${topStr} $${item.price}\n`;
+        total += item.price;
+        count++;
+      });
+    }
+  });
 
+  msg += `------------------------\n`;
+  msg += `共 ${count} 杯，總計 $${total} 元`;
+
+  document.getElementById("lineMessage").value = msg;
+  toast("已產生 LINE 訊息！");
 }
 
-
-function escapeHtml(value) {
-
-  return String(value)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
+function copyLineMessage() {
+  const textarea = document.getElementById("lineMessage");
+  if (!textarea.value) {
+    alert("請先點擊「產生 LINE 訂單訊息」！");
+    return;
+  }
+  textarea.select();
+  document.execCommand("copy");
+  toast("已複製到剪貼簿！");
 }
-
-
-function toast(message) {
-
-  const element =
-    document
-      .getElementById(
-        "toast"
-      );
-
-
-  element.textContent =
-    message;
-
-
-  element.classList.add(
-    "show"
-  );
-
-
-  setTimeout(
-    function() {
-
-      element.classList.remove(
-        "show"
-      );
-
-    },
-    2200
-  );
-
-}
-
 </script>
-
 </body>
 </html>
