@@ -3,196 +3,162 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🥤 飲料團購</title>
+  <title>🥤 飲料團購助手 (看圖自填版)</title>
   <style>
     * { box-sizing: border-box; }
-    body { margin: 0; padding: 12px; background: #f5f6f8; color: #222; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif; }
-    .container { max-width: 900px; margin: auto; }
-    .card { background: #fff; border-radius: 18px; padding: 18px; margin-bottom: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
-    h1 { margin: 0; font-size: 28px; }
-    h2 { margin: 0 0 14px; font-size: 20px; }
-    .subtitle { margin-top: 6px; color: #777; }
+    body { margin: 0; padding: 12px; background: #f4f6f8; color: #222; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif; }
+    .container { max-width: 800px; margin: auto; }
+    .card { background: #fff; border-radius: 16px; padding: 16px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.05); }
+    h1 { margin: 0; font-size: 24px; }
+    h2 { margin: 0 0 12px; font-size: 18px; color: #333; }
+    .subtitle { margin-top: 4px; color: #666; font-size: 13px; }
     .row { display: flex; gap: 10px; flex-wrap: wrap; }
-    .field { flex: 1; min-width: 180px; }
-    label { display: block; font-size: 13px; color: #666; margin-bottom: 6px; }
-    input, select, textarea { width: 100%; padding: 11px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 15px; background: white; }
-    textarea { min-height: 120px; font-family: inherit; }
-    button { border: 0; border-radius: 10px; padding: 11px 15px; background: #222; color: white; font-size: 15px; cursor: pointer; }
+    .field { flex: 1; min-width: 140px; }
+    label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; font-weight: bold; }
+    input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; background: #fff; }
+    button { border: 0; border-radius: 8px; padding: 10px 14px; background: #222; color: #fff; font-size: 15px; cursor: pointer; font-weight: bold; }
     button:hover { opacity: .9; }
     button.green { background: #2e8b57; }
     button.red { background: #d9534f; }
     button.blue { background: #3976cf; }
-    button.gray { background: #eee; color: #333; }
-    button.small { padding: 7px 10px; font-size: 13px; }
     button.full { width: 100%; }
-    .hidden { display: none !important; }
+    
+    /* 菜單圖片預覽 */
+    .menu-img-container { text-align: center; background: #f9f9f9; border: 2px dashed #ddd; border-radius: 12px; padding: 10px; position: relative; }
+    .menu-img { max-width: 100%; max-height: 400px; border-radius: 8px; cursor: zoom-in; object-fit: contain; }
+    .zoom-hint { font-size: 12px; color: #888; margin-top: 6px; }
 
-    .status { display: inline-block; margin-top: 15px; padding: 7px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; }
-    .status.open { background: #e5f7ed; color: #21834b; }
-    .status.closed { background: #fbe7e7; color: #b33c3c; }
-    .admin { border: 2px dashed #ddd; }
-    .notice { padding: 12px; border-radius: 10px; background: #fff7dc; border: 1px solid #f0dc94; color: #735d00; font-size: 13px; line-height: 1.7; }
-    .success { padding: 12px; border-radius: 10px; background: #eaf8ef; border: 1px solid #b9e4c7; color: #25733f; font-size: 13px; }
-    .danger { padding: 12px; border-radius: 10px; background: #fbe7e7; border: 1px solid #f5c6c6; color: #b33c3c; font-size: 13px; word-break: break-all; }
+    /* 燈箱 Modal (圖片放大) */
+    .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); overflow: auto; justify-content: center; align-items: center; }
+    .modal-content { max-width: 95%; max-height: 95vh; object-fit: contain; cursor: zoom-out; border-radius: 8px; }
+    .close-modal { position: absolute; top: 15px; right: 20px; color: #fff; font-size: 35px; font-weight: bold; cursor: pointer; }
 
-    .menu-preview { width: 100%; max-height: 350px; object-fit: contain; margin-top: 12px; border-radius: 12px; background: #f4f4f4; display: none; }
+    /* 人員標籤 */
     .people-list { display: flex; flex-wrap: wrap; gap: 8px; }
-    .person-btn { background: #f1f3f5; color: #333; border: 1px solid #ddd; }
-    .person-btn.selected { background: #222; color: white; }
-    .category-editor { border: 1px solid #eee; border-radius: 12px; padding: 12px; margin-bottom: 12px; }
-    .category-header { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
-    .drink-editor { display: grid; grid-template-columns: 1fr 75px 75px 42px; gap: 6px; margin-bottom: 7px; }
-    .drink-editor input { padding: 8px; font-size: 14px; }
-    .order-person { padding: 13px 0; border-bottom: 1px solid #eee; }
-    .person-header { display: flex; justify-content: space-between; font-weight: 700; font-size: 16px; }
-    .order-item { margin-top: 8px; padding: 10px; background: #f8f8f8; border-radius: 10px; font-size: 14px; line-height: 1.7; }
-    .price { font-weight: 700; white-space: nowrap; }
-    .total-box { margin-top: 15px; padding: 18px; background: #222; color: white; border-radius: 14px; }
-    .total-number { font-size: 30px; font-weight: 700; }
-    .toast { position: fixed; left: 50%; bottom: 25px; transform: translateX(-50%); background: #222; color: white; padding: 12px 18px; border-radius: 30px; font-size: 14px; z-index: 9999; opacity: 0; pointer-events: none; transition: .25s; }
-    .toast.show { opacity: 1; }
+    .person-btn { background: #f0f0f0; color: #333; border: 1px solid #ddd; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+    .person-btn.selected { background: #222; color: white; border-color: #222; }
 
-    @media(max-width:600px) {
-      body { padding: 8px; }
-      .card { padding: 14px; }
-      .drink-editor { grid-template-columns: 1fr 60px 60px 38px; }
-    }
+    /* 訂單明細 */
+    .order-person { padding: 12px 0; border-bottom: 1px solid #eee; }
+    .person-header { display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; margin-bottom: 6px; }
+    .order-item { padding: 8px 10px; background: #f8f9fa; border-radius: 8px; margin-bottom: 6px; font-size: 14px; }
+    .total-box { margin-top: 15px; padding: 16px; background: #222; color: white; border-radius: 12px; }
+    .toast { position: fixed; left: 50%; bottom: 25px; transform: translateX(-50%); background: #222; color: #fff; padding: 10px 20px; border-radius: 30px; font-size: 14px; z-index: 10000; opacity: 0; pointer-events: none; transition: .2s; }
+    .toast.show { opacity: 1; }
   </style>
 </head>
 
 <body>
 <div class="container">
+  <!-- 標頭資訊 -->
   <div class="card">
-    <h1>🥤 飲料團購</h1>
-    <div class="subtitle">今天一起訂飲料</div>
-    <div style="height:15px;"></div>
+    <h1>🥤 飲料團購助手</h1>
+    <div class="subtitle">看圖點餐 ‧ 自行填寫 ‧ 即時統計</div>
+    <div style="height:12px;"></div>
     <div class="row">
       <div class="field">
-        <label>店家</label>
-        <input id="shopName" placeholder="例如：得正">
+        <label>店家名稱</label>
+        <input id="shopName" placeholder="例如：得正、五十嵐" onchange="updateShopName()">
       </div>
       <div class="field">
         <label>日期</label>
         <input id="orderDate" type="date">
       </div>
     </div>
-    <div id="statusBadge" class="status open">● 訂購中</div>
   </div>
 
-  <!-- 管理區 -->
-  <div class="card admin">
-    <h2>⚙️ 匯入 / 管理菜單</h2>
-    
-    <div class="field" style="margin-bottom: 12px;">
-      <label>Gemini API Key (AI 辨識必填)</label>
-      <input id="apiKeyInput" type="password" placeholder="貼上你的 API Key" onchange="saveApiKey()">
-    </div>
-
-    <label>上傳菜單照片</label>
-    <div class="row">
-      <div class="field">
-        <input id="menuImage" type="file" accept="image/*" onchange="previewImage(event)">
-      </div>
-      <button class="blue" onclick="runGeminiOCR()">🤖 AI 分析照片</button>
-      <button class="green" onclick="publishMenu()">📤 發布今日菜單</button>
-    </div>
-
-    <img id="menuPreview" class="menu-preview">
-    <div id="ocrStatus" class="hidden" style="margin-top:12px;"></div>
-
-    <div style="height:12px;"></div>
-    <button class="gray" onclick="toggleEditor()">✏️ 檢視/手動修改菜單項目</button>
-
-    <div id="menuEditor" class="hidden" style="margin-top:15px;">
-      <div id="editorContainer"></div>
-      <div class="row">
-        <button class="gray" onclick="addCategory()">＋ 新增分類</button>
-        <button class="green" onclick="publishMenu()">💾 儲存並發布</button>
-      </div>
-    </div>
-
-    <div style="height:15px;"></div>
-    <div class="row">
-      <button class="green" onclick="setOrderStatus(true)">🔓 開始訂購</button>
-      <button class="red" onclick="setOrderStatus(false)">🔒 關閉訂購</button>
-    </div>
-  </div>
-
-  <!-- 訂購人 -->
+  <!-- 菜單圖片區 -->
   <div class="card">
-    <h2>👥 誰要喝？</h2>
+    <h2>📸 今日菜單 (點擊圖片可放大)</h2>
+    <div class="field" style="margin-bottom:10px;">
+      <label>上傳/更新菜單圖片：</label>
+      <input type="file" id="imageInput" accept="image/*" onchange="uploadMenuImage(this)">
+    </div>
+    
+    <div class="menu-img-container">
+      <img id="menuImg" class="menu-img" src="" alt="尚無菜單圖片，請點擊上方上傳" onclick="openZoomModal()">
+      <div id="zoomHint" class="zoom-hint">🔍 點擊圖片放大檢視</div>
+    </div>
+  </div>
+
+  <!-- 點餐人選擇 -->
+  <div class="card">
+    <h2>👥 1. 選擇點餐人</h2>
     <div class="people-list" id="peopleList"></div>
     <div style="height:12px;"></div>
     <div class="row">
       <div class="field">
-        <input id="newPerson" placeholder="輸入同事姓名">
+        <input id="newPerson" placeholder="輸入同事或朋友姓名">
       </div>
-      <button onclick="addPerson()">＋ 新增</button>
+      <button onclick="addPerson()">＋ 新增成員</button>
     </div>
   </div>
 
-  <!-- 點餐區 -->
+  <!-- 自由填寫點餐區 -->
   <div class="card">
-    <h2>🧋 我要點飲料</h2>
-    <div id="closedMessage" class="notice hidden">🔒 目前已關閉訂購。</div>
-    <div id="orderForm">
+    <h2>✍️ 2. 輸入想喝的飲料</h2>
+    <div class="row" style="margin-bottom:10px;">
+      <div class="field" style="flex:2;">
+        <label>飲料品項名稱 *</label>
+        <input id="drinkName" placeholder="例如：焙烏龍奶茶">
+      </div>
+      <div class="field" style="flex:1;">
+        <label>價格 ($) *</label>
+        <input id="drinkPrice" type="number" placeholder="55">
+      </div>
+    </div>
+
+    <div class="row" style="margin-bottom:10px;">
       <div class="field">
-        <label>飲料</label>
-        <select id="drinkSelect"></select>
+        <label>容量</label>
+        <select id="drinkSize"><option value="L">大杯 (L)</option><option value="M">中杯 (M)</option></select>
       </div>
-      <div style="height:10px;"></div>
-      <div class="row">
-        <div class="field">
-          <label>大小</label>
-          <select id="sizeSelect"><option value="M">M</option><option value="L">L</option></select>
-        </div>
-        <div class="field">
-          <label>甜度</label>
-          <select id="sugarSelect">
-            <option>正常糖</option><option>少糖</option><option>半糖</option><option>微糖</option><option>無糖</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>冰量</label>
-          <select id="iceSelect">
-            <option>正常冰</option><option>少冰</option><option>微冰</option><option>去冰</option><option>溫</option><option>熱</option>
-          </select>
-        </div>
+      <div class="field">
+        <label>甜度</label>
+        <select id="drinkSugar">
+          <option>無糖 (0%)</option><option>微糖 (30%)</option><option>半糖 (50%)</option><option>少糖 (70%)</option><option>正常糖 (100%)</option>
+        </select>
       </div>
-      <div style="height:12px;"></div>
-      <label>加料</label>
-      <div id="toppingList" class="people-list"></div>
-      <div style="height:15px;"></div>
-      <div style="background:#fafafa;padding:14px;border-radius:12px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <strong>本杯金額</strong>
-          <span id="currentPrice" class="price">$0</span>
-        </div>
-        <div style="height:10px;"></div>
-        <button class="green full" onclick="addOrder()">🛒 加入我的訂單</button>
+      <div class="field">
+        <label>冰量</label>
+        <select id="drinkIce">
+          <option>微冰</option><option>去冰</option><option>少冰</option><option>正常冰</option><option>溫</option><option>熱</option>
+        </select>
       </div>
     </div>
+
+    <div class="field" style="margin-bottom:12px;">
+      <label>加料或備註</label>
+      <input id="drinkNote" placeholder="例如：加茶凍 +10、發票分開算">
+    </div>
+
+    <button class="green full" onclick="addOrder()">🛒 加入團購清單</button>
   </div>
 
-  <!-- 今日訂單 -->
+  <!-- 訂單統計區 -->
   <div class="card">
-    <h2>📋 今日訂單</h2>
+    <h2>📋 今日訂單明細</h2>
     <div id="ordersContainer"></div>
     <div class="total-box">
-      <div>目前總金額</div>
-      <div id="totalAmount" class="total-number">$0</div>
-      <div style="height:12px;"></div>
-      <button class="full" onclick="generateLineMessage()">📋 產生 LINE 訂單訊息</button>
+      <div>團購總金額</div>
+      <div id="totalAmount" style="font-size:32px; font-weight:bold; margin:6px 0;">$0</div>
+      <button class="full" onclick="generateLineMessage()">📋 產生 LINE 點餐彙整訊息</button>
     </div>
   </div>
 
-  <!-- LINE 輸出 -->
+  <!-- LINE 訊息格式 -->
   <div class="card">
-    <h2>💬 LINE 訂單訊息</h2>
-    <textarea id="lineMessage" readonly placeholder="產生後可以直接複製貼到 LINE"></textarea>
+    <h2>💬 LINE 點餐訊息</h2>
+    <textarea id="lineMessage" rows="5" readonly placeholder="點擊上方按鈕產生複製訊息"></textarea>
     <div style="height:10px;"></div>
-    <button class="blue full" onclick="copyLineMessage()">📋 複製訊息</button>
+    <button class="blue full" onclick="copyLineMessage()">📋 複製到剪貼簿</button>
   </div>
+</div>
+
+<!-- 圖片放大 Modal 燈箱 -->
+<div id="imageModal" class="modal" onclick="closeZoomModal()">
+  <span class="close-modal">&times;</span>
+  <img class="modal-content" id="imgModalSrc">
 </div>
 
 <div id="toast" class="toast"></div>
@@ -200,15 +166,9 @@
 <script>
 const DATABASE_URL = "https://my-family-calendar-219bb-default-rtdb.firebaseio.com";
 let currentDate = "";
-let data = { shopName: "", isOpen: true, menu: [], orders: {} };
+let data = { shopName: "", menuImg: "", orders: {} };
 let people = ["Alice", "Bob", "Charlie"];
 let selectedName = "";
-let selectedToppings = [];
-
-const toppings = [
-  { name: "珍珠", price: 10 }, { name: "黃金珍珠", price: 10 },
-  { name: "焙烏龍茶凍", price: 10 }, { name: "芝士奶蓋", price: 20 }
-];
 
 function toast(msg) {
   const el = document.getElementById("toast");
@@ -217,22 +177,12 @@ function toast(msg) {
   setTimeout(() => el.classList.remove("show"), 2000);
 }
 
-function saveApiKey() {
-  localStorage.setItem("gemini_api_key", document.getElementById("apiKeyInput").value.trim());
-}
-
 document.addEventListener("DOMContentLoaded", async function() {
   const today = new Date();
   currentDate = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
   document.getElementById("orderDate").value = currentDate;
-  
-  const savedKey = localStorage.getItem("gemini_api_key");
-  if(savedKey) document.getElementById("apiKeyInput").value = savedKey;
 
-  document.getElementById("drinkSelect").addEventListener("change", updatePrice);
-  document.getElementById("sizeSelect").addEventListener("change", updatePrice);
-
-  renderToppings();
+  renderPeople();
   await loadToday();
   startSync();
 });
@@ -244,93 +194,196 @@ async function dbPatch(path, val) { return (await fetch(dbUrl(path), { method: "
 async function dbPut(path, val) { return (await fetch(dbUrl(path), { method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(val) })).json(); }
 
 async function loadToday() {
-  const result = await dbGet("drinkOrders/" + currentDate);
+  const result = await dbGet("drinkOrdersSelfKey/" + currentDate);
   if (result) {
     data.shopName = result.shopName || "";
-    data.isOpen = result.isOpen !== false;
-    data.menu = result.menu || [];
+    data.menuImg = result.menuImg || "";
     data.orders = result.orders || {};
   }
   document.getElementById("shopName").value = data.shopName;
-  renderAll();
+  if (data.menuImg) {
+    document.getElementById("menuImg").src = data.menuImg;
+    document.getElementById("zoomHint").style.display = "block";
+  } else {
+    document.getElementById("zoomHint").style.display = "none";
+  }
+  renderOrders();
 }
 
 function startSync() {
   setInterval(async () => {
-    const res = await dbGet("drinkOrders/" + currentDate + "/orders");
-    data.orders = res || {};
-    renderOrders();
+    const res = await dbGet("drinkOrdersSelfKey/" + currentDate);
+    if (res) {
+      if (res.shopName !== undefined) document.getElementById("shopName").value = res.shopName;
+      if (res.menuImg && res.menuImg !== data.menuImg) {
+        data.menuImg = res.menuImg;
+        document.getElementById("menuImg").src = data.menuImg;
+        document.getElementById("zoomHint").style.display = "block";
+      }
+      data.orders = res.orders || {};
+      renderOrders();
+    }
   }, 4000);
 }
 
-/* AI Gemini 辨識 */
-async function runGeminiOCR() {
-  const apiKey = document.getElementById("apiKeyInput").value.trim();
-  const fileInput = document.getElementById("menuImage");
-  const file = fileInput.files[0];
+/* 店家名稱更新 */
+async function updateShopName() {
+  data.shopName = document.getElementById("shopName").value.trim();
+  await dbPatch("drinkOrdersSelfKey/" + currentDate, { shopName: data.shopName });
+}
 
-  if (!apiKey) { alert("請先輸入 Gemini API Key！"); return; }
-  if (!file) { alert("請上傳菜單照片！"); return; }
-
-  const status = document.getElementById("ocrStatus");
-  status.className = "notice";
-  status.classList.remove("hidden");
-  status.textContent = "🤖 AI 分析照片中，請稍候...";
-
-  // 正確解析圖片的 Base64 數據與 MimeType
-  const imageData = await new Promise((resolve) => {
+/* 圖片上傳與放大 */
+function uploadMenuImage(input) {
+  if (input.files && input.files[0]) {
     const reader = new FileReader();
-    reader.onload = (e) => {
-      const dataUrl = e.target.result;
-      const mimeType = dataUrl.split(';')[0].split(':')[1] || 'image/jpeg';
-      const base64 = dataUrl.split(',')[1];
-      resolve({ mimeType, base64 });
+    reader.onload = async function(e) {
+      data.menuImg = e.target.result;
+      document.getElementById("menuImg").src = data.menuImg;
+      document.getElementById("zoomHint").style.display = "block";
+      await dbPatch("drinkOrdersSelfKey/" + currentDate, { menuImg: data.menuImg });
+      toast("✅ 菜單圖片上傳成功！");
     };
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function openZoomModal() {
+  const img = document.getElementById("menuImg");
+  if (!img.src || img.src.endsWith(".html")) return;
+  document.getElementById("imageModal").style.display = "flex";
+  document.getElementById("imgModalSrc").src = img.src;
+}
+
+function closeZoomModal() {
+  document.getElementById("imageModal").style.display = "none";
+}
+
+/* 人員管理 */
+function renderPeople() {
+  const container = document.getElementById("peopleList");
+  container.innerHTML = "";
+  people.forEach(p => {
+    const btn = document.createElement("button");
+    btn.className = "person-btn" + (selectedName === p ? " selected" : "");
+    btn.textContent = p;
+    btn.onclick = () => { selectedName = p; renderPeople(); };
+    container.appendChild(btn);
+  });
+}
+
+function addPerson() {
+  const name = document.getElementById("newPerson").value.trim();
+  if (name && !people.includes(name)) {
+    people.push(name);
+    selectedName = name;
+    document.getElementById("newPerson").value = "";
+    renderPeople();
+  }
+}
+
+/* 點餐與訂單管理 */
+async function addOrder() {
+  if (!selectedName) { alert("請先點選『1. 選擇點餐人』！"); return; }
+  const name = document.getElementById("drinkName").value.trim();
+  const price = Number(document.getElementById("drinkPrice").value);
+
+  if (!name) { alert("請輸入飲料品項名稱！"); return; }
+  if (!price || price <= 0) { alert("請輸入正確的價格！"); return; }
+
+  const item = {
+    name: name,
+    price: price,
+    size: document.getElementById("drinkSize").value,
+    sugar: document.getElementById("drinkSugar").value,
+    ice: document.getElementById("drinkIce").value,
+    note: document.getElementById("drinkNote").value.trim()
+  };
+
+  if (!data.orders[selectedName]) data.orders[selectedName] = [];
+  data.orders[selectedName].push(item);
+
+  await dbPut("drinkOrdersSelfKey/" + currentDate + "/orders", data.orders);
+  toast("✅ 已加入訂單！");
+  
+  // 清空輸入框
+  document.getElementById("drinkName").value = "";
+  document.getElementById("drinkPrice").value = "";
+  document.getElementById("drinkNote").value = "";
+  renderOrders();
+}
+
+function renderOrders() {
+  const container = document.getElementById("ordersContainer");
+  container.innerHTML = "";
+  let total = 0;
+
+  Object.keys(data.orders || {}).forEach(name => {
+    const items = data.orders[name];
+    if (!items || items.length === 0) return;
+
+    let pTotal = 0;
+    let html = "";
+    items.forEach((item, idx) => {
+      pTotal += item.price;
+      total += item.price;
+      const noteStr = item.note ? ` (${item.note})` : "";
+      html += `
+        <div class="order-item">
+          <div style="display:flex; justify-content:space-between; font-weight:bold;">
+            <span>${item.name} (${item.size})</span>
+            <span>$${item.price}</span>
+          </div>
+          <div style="color:#666; font-size:12px; margin-top:2px;">
+            ${item.sugar} / ${item.ice}${noteStr}
+          </div>
+          <div style="text-align:right; margin-top:4px;">
+            <button style="background:#d9534f; padding:3px 8px; font-size:12px;" onclick="deleteItem('${name}', ${idx})">刪除</button>
+          </div>
+        </div>
+      `;
+    });
+
+    const box = document.createElement("div");
+    box.className = "order-person";
+    box.innerHTML = `<div class="person-header"><span>${name}</span><span>小計: $${pTotal}</span></div>${html}`;
+    container.appendChild(box);
   });
 
-  const promptText = `
-你是一個菜單解析助手。請讀取這張菜單圖片，擷取所有飲料品項名稱與中杯(M)/大杯(L)價格。
-請只輸出 JSON 格式陣列，不要有任何 Markdown 說明文字，格式如下：
-[
-  {
-    "category": "分類名稱",
-    "items": [
-      { "name": "品項名稱", "M": 50, "L": 60 }
-    ]
-  }
-]
-如果該飲料只有一種容量與價格，請將 M 與 L 的金額設為相同數字。請忽略英文翻譯。
-`;
+  document.getElementById("totalAmount").textContent = `$${total}`;
+}
 
-  // 嘗試相容性最高的 model endpoint
-  const modelsToTry = [
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
-  ];
+async function deleteItem(name, idx) {
+  data.orders[name].splice(idx, 1);
+  if (data.orders[name].length === 0) delete data.orders[name];
+  await dbPut("drinkOrdersSelfKey/" + currentDate + "/orders", data.orders);
+  renderOrders();
+}
 
-  let lastError = "";
+function generateLineMessage() {
+  let shop = document.getElementById("shopName").value.trim() || "飲料店";
+  let msg = `🥤 ${currentDate} 【${shop}】團購清單\n------------------------\n`;
+  let total = 0, count = 0;
+  
+  Object.keys(data.orders || {}).forEach(name => {
+    (data.orders[name] || []).forEach(item => {
+      const noteStr = item.note ? ` [${item.note}]` : "";
+      msg += `【${name}】${item.name} (${item.size}) / ${item.sugar} / ${item.ice}${noteStr} $${item.price}\n`;
+      total += item.price;
+      count++;
+    });
+  });
+  msg += `------------------------\n共 ${count} 杯，總計 $${total} 元`;
+  document.getElementById("lineMessage").value = msg;
+  toast("已產生 LINE 訊息！");
+}
 
-  for (const endpoint of modelsToTry) {
-    try {
-      const response = await fetch(`${endpoint}?key=${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [
-              { text: promptText },
-              { inline_data: { mime_type: imageData.mimeType, data: imageData.base64 } }
-            ]
-          }]
-        })
-      });
-
-      const resData = await response.json();
-      if (resData.error) {
-        lastError = resData.error.message || JSON.stringify(resData.error);
-        continue; // 嘗試下一個模型
-      }
-
-      let text = resData.candidates[0].content.parts[0].text.trim();
-      text = text.replace(/```json/gi, '').replace(/
+function copyLineMessage() {
+  const el = document.getElementById("lineMessage");
+  if (!el.value) return alert("請先點擊產生訊息！");
+  el.select();
+  document.execCommand("copy");
+  toast("已複製到剪貼簿！");
+}
+</script>
+</body>
+</html>
