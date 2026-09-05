@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🥤 飲料團購</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Noto Sans TC",
+    sans-serif;
+  background: #f5f5f5;
+  color: #222;
+}
+
+.container {
+  max-width: 760px;
+  margin: auto;
+}
+
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+
+h1 {
+  margin: 0 0 6px;
+}
+
+h2 {
+  font-size: 18px;
+  margin: 0 0 14px;
+}
+
+.subtitle {
+  color: #777;
+  font-size: 14px;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 16px;
+  background: white;
+}
+
+textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 16px;
+  min-height: 44px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.primary {
+  background: #222;
+  color: white;
+}
+
+.secondary {
+  background: #eee;
+  color: #222;
+}
+
+.danger {
+  background: #fff0f0;
+  color: #c00;
+}
+
+.people {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.person {
+  background: #f3f3f3;
+  border: 1px solid #ddd;
+}
+
+.person.active {
+  background: #222;
+  color: white;
+}
+
+.upload {
+  border: 2px dashed #ccc;
+  border-radius: 14px;
+  padding: 30px 15px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.upload:hover {
+  border-color: #777;
+}
+
+.menu-category {
+  margin-top: 18px;
+  font-weight: bold;
+}
+
+.menu-item {
+  display: grid;
+  grid-template-columns: 1fr 80px 80px 44px;
+  gap: 6px;
+  margin-top: 7px;
+}
+
+.order {
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.order-detail {
+  color: #777;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.total {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.status {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #eee;
+  display: inline-block;
+  font-size: 13px;
+}
+
+.status.open {
+  background: #e8f5e9;
+  color: #26733a;
+}
+
+.status.closed {
+  background: #eee;
+  color: #777;
+}
+
+.preview {
+  max-width: 100%;
+  max-height: 400px;
+  margin-top: 12px;
+  border-radius: 12px;
+  display: block;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.notice {
+  font-size: 13px;
+  color: #777;
+  line-height: 1.6;
+}
+
+.result-box {
+  background: #fafafa;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+@media(max-width:600px) {
+  body {
+    padding: 10px;
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .menu-item {
+    grid-template-columns: 1fr 70px 70px 40px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- 標題 -->
+  <div class="card">
+    <h1>🥤 飲料團購</h1>
+    <div class="subtitle">
+      每天換店家、換菜單也可以使用
+    </div>
+  </div>
+
+
+  <!-- 今日基本資料 -->
+  <div class="card">
+
+    <h2>① 今日訂單</h2>
+
+    <div class="grid">
+
+      <div>
+        <label>店家名稱</label>
+        <input id="shopName" placeholder="例如：Milksha">
+      </div>
+
+      <div>
+        <label>訂購日期</label>
+        <input id="orderDate" type="date">
+      </div>
+
+    </div>
+
+    <div style="margin-top:15px">
+      <span id="orderStatus" class="status">
+        尚未開單
+      </span>
+    </div>
+
+  </div>
+
+
+  <!-- 菜單 -->
+  <div class="card">
+
+    <h2>② 今日菜單</h2>
+
+    <label for="menuImage" class="upload">
+
+      <div style="font-size:36px">📷</div>
+
+      <strong>上傳今天的菜單照片</strong>
+
+      <div class="notice">
+        可以直接使用手機拍照
+      </div>
+
+      <input
+        id="menuImage"
+        type="file"
+        accept="image/*"
+        style="display:none"
+      >
+
+    </label>
+
+    <img
+      id="imagePreview"
+      class="preview hidden"
+      alt="今日菜單"
+    >
+
+    <div class="notice" style="margin-top:10px">
+      ※ 目前版本會保存菜單資料與圖片預覽。
+      AI 自動辨識菜單功能可以在下一版接入。
+    </div>
+
+
+    <div style="margin-top:20px">
+
+      <h2>菜單內容</h2>
+
+      <div id="menuEditor"></div>
+
+      <button
+        type="button"
+        class="secondary"
+        onclick="addMenuItem()"
+        style="margin-top:12px"
+      >
+        ＋新增飲料
+      </button>
+
+    </div>
+
+    <button
+      type="button"
+      class="primary"
+      onclick="saveMenu()"
+      style="width:100%;margin-top:18px"
+    >
+      💾 儲存今日菜單
+    </button>
+
+  </div>
+
+
+  <!-- 點單 -->
+  <div class="card">
+
+    <h2>③ 開始點飲料</h2>
+
+    <div class="people" id="peopleList"></div>
+
+    <div style="display:flex;gap:8px;margin-top:12px">
+
+      <input
+        id="newPerson"
+        placeholder="新增同事姓名"
+      >
+
+      <button
+        type="button"
+        class="secondary"
+        onclick="addPerson()"
+      >
+        ＋加入
+      </button>
+
+    </div>
+
+
+    <div
+      id="orderPicker"
+      class="hidden"
+      style="
+        margin-top:18px;
+        padding:15px;
+        background:#f8f8f8;
+        border-radius:14px;
+      "
+    >
+
+      <h2>
+        正在幫
+        <span id="activePerson"></span>
+        點餐
+      </h2>
+
+
+      <label>飲料</label>
+      <select id="drinkSelect"></select>
+
+
+      <div class="grid" style="margin-top:10px">
+
+        <div>
+          <label>尺寸</label>
+          <select id="sizeSelect"></select>
+        </div>
+
+        <div>
+          <label>甜度</label>
+          <select id="sugarSelect">
+            <option>正常糖</option>
+            <option>少糖</option>
+            <option>半糖</option>
+            <option>微糖</option>
+            <option>無糖</option>
+          </select>
+        </div>
+
+      </div>
+
+
+      <div class="grid" style="margin-top:10px">
+
+        <div>
+          <label>冰量</label>
+          <select id="iceSelect">
+            <option>正常冰</option>
+            <option>少冰</option>
+            <option>微冰</option>
+            <option>去冰</option>
+            <option>溫</option>
+            <option>熱</option>
+          </select>
+        </div>
+
+        <div>
+          <label>加料</label>
+          <select id="toppingSelect">
+            <option value="0">不加料</option>
+            <option value="10">珍珠 +$10</option>
+            <option value="10">仙草凍 +$10</option>
+            <option value="10">綠茶凍 +$10</option>
+            <option value="15">椰果 +$15</option>
+          </select>
+        </div>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="primary"
+        onclick="addOrder()"
+        style="width:100%;margin-top:14px"
+      >
+        ＋加入這杯
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- 訂單 -->
+  <div class="card">
+
+    <h2>
+      ④ 今日訂單
+      <span id="cupCount" class="subtitle"></span>
+    </h2>
+
+    <div id="ordersList"></div>
+
+    <div
+      style="
+        margin-top:18px;
+        padding:15px;
+        background:#f7f7f7;
+        border-radius:12px;
+      "
+    >
+
+      <div class="subtitle">
+        今日總金額
+      </div>
+
+      <div id="totalMoney" class="total">
+        $0
+      </div>
+
+      <div id="personMoney"
+           class="notice"
+           style="margin-top:8px">
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- LINE -->
+  <div class="card">
+
+    <h2>⑤ LINE 訂單</h2>
+
+    <textarea
+      id="lineText"
+      readonly
+      placeholder="完成訂單後會自動產生"
+    ></textarea>
+
+    <button
+      type="button"
+      class="secondary"
+      onclick="copyLine()"
+      style="width:100%;margin-top:10px"
+    >
+      📋 複製 LINE 訂單
+    </button>
+
+  </div>
+
+
+  <!-- 結單 -->
+  <div class="card">
+
+    <button
+      type="button"
+      class="primary"
+      onclick="toggleOrderStatus()"
+      style="width:100%"
+    >
+      🔒 開單／結單
+    </button>
+
+    <div class="notice" style="margin-top:10px">
+      結單後可以停止大家繼續修改訂單。
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- Firebase -->
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  set,
+  get,
+  onValue,
+  push,
+  update
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+/*
+====================================================
+ Firebase 設定
+====================================================
+*/
+
+const firebaseConfig = {
+
+  /*
+  這幾個欄位如果你的 Firebase Web App 已經有設定，
+  請填入 Firebase Console 提供的內容。
+
+  databaseURL 使用你剛剛提供的網址。
+  */
+
+  apiKey: "",
+  authDomain: "my-family-calendar-219bb.firebaseapp.com",
+
+  databaseURL:
+    "https://my-family-calendar-219bb-default-rtdb.firebaseio.com",
+
+  projectId:
+    "my-family-calendar-219bb",
+
+  storageBucket:
+    "my-family-calendar-219bb.firebasestorage.app",
+
+  messagingSenderId: "",
+  appId: ""
+
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const db = getDatabase(app);
+
+
+/*
+====================================================
+ 只使用 /drinkOrders
+ 不碰原本的 calendar
+====================================================
+*/
+
+const today =
+  new Date().toISOString().slice(0,10);
+
+document.getElementById("orderDate").value = today;
+
+
+let currentDate = today;
+
+let people = [
+  "春薇",
+  "Yoan",
+  "嫚樺",
+  "Wu",
+  "蕭玉惠",
+  "耀耀"
+];
+
+let menu = [
+
+  {
+    category:"醇萃茶",
+    name:"蘭韻金萱",
+    priceM:45,
+    priceL:0
+  },
+
+  {
+    category:"醇萃茶",
+    name:"慕斯蘭韻金萱",
+    priceM:55,
+    priceL:0
+  },
+
+  {
+    category:"醇萃茶",
+    name:"娜杯紅茶",
+    priceM:40,
+    priceL:0
+  },
+
+  {
+    category:"醇萃茶",
+    name:"英倫伯爵紅茶",
+    priceM:35,
+    priceL:0
+  },
+
+  {
+    category:"鮮調果茶",
+    name:"桂香原片青",
+    priceM:50,
+    priceL:0
+  },
+
+  {
+    category:"鮮調果茶",
+    name:"白甘蔗青茶",
+    priceM:70,
+    priceL:0
+  },
+
+  {
+    category:"鮮調果茶",
+    name:"香柚綠茶",
+    priceM:60,
+    priceL:0
+  },
+
+  {
+    category:"醇濃鮮奶茶",
+    name:"蘭韻金萱拿鐵",
+    priceM:65,
+    priceL:85
+  },
+
+  {
+    category:"醇濃鮮奶茶",
+    name:"慕斯金萱拿鐵",
+    priceM:75,
+    priceL:0
+  },
+
+  {
+    category:"無咖啡因",
+    name:"焙香決明大麥",
+    priceM:35,
+    priceL:0
+  },
+
+  {
+    category:"無咖啡因",
+    name:"焙香大麥拿鐵",
+    priceM:50,
+    priceL:60
+  },
+
+  {
+    category:"醇濃綠光鮮奶",
+    name:"芋頭鮮奶",
+    priceM:65,
+    priceL:85
+  },
+
+  {
+    category:"醇濃綠光鮮奶",
+    name:"珍珠鮮奶",
+    priceM:65,
+    priceL:85
+  }
+
+];
+
+
+let orders = {};
+
+let activePerson = "";
+
+let orderOpen = false;
+
+
+/*
+====================================================
+ 菜單編輯器
+====================================================
+*/
+
+function renderMenu(){
+
+  const box =
+    document.getElementById("menuEditor");
+
+  box.innerHTML = "";
+
+  menu.forEach((item,index)=>{
+
+    const row =
+      document.createElement("div");
+
+    row.className =
+      "menu-item";
+
+    row.innerHTML = `
+
+      <input
+        value="${escapeHtml(item.name)}"
+        data-index="${index}"
+        data-field="name"
+        placeholder="飲料名稱"
+      >
+
+      <input
+        type="number"
+        min="0"
+        value="${item.priceM || ""}"
+        data-index="${index}"
+        data-field="priceM"
+        placeholder="M"
+      >
+
+      <input
+        type="number"
+        min="0"
+        value="${item.priceL || ""}"
+        data-index="${index}"
+        data-field="priceL"
+        placeholder="L"
+      >
+
+      <button
+        type="button"
+        class="danger"
+        data-delete="${index}"
+      >
+        ×
+      </button>
+
+    `;
+
+    box.appendChild(row);
+
+  });
+
+
+  box.querySelectorAll("input")
+    .forEach(input=>{
+
+      input.addEventListener(
+        "input",
+        ()=>{
+
+          const i =
+            Number(input.dataset.index);
+
+          const field =
+            input.dataset.field;
+
+          if(field === "name"){
+
+            menu[i].name =
+              input.value;
+
+          }else{
+
+            menu[i][field] =
+              Number(input.value) || 0;
+
+          }
+
+        }
+      );
+
+    });
+
+
+  box.querySelectorAll("[data-delete]")
+    .forEach(button=>{
+
+      button.addEventListener(
+        "click",
+        ()=>{
+
+          const i =
+            Number(button.dataset.delete);
+
+          menu.splice(i,1);
+
+          renderMenu();
+
+        }
+      );
+
+    });
+
+}
+
+
+window.addMenuItem = function(){
+
+  menu.push({
+
+    category:"其他",
+    name:"新飲料",
+    priceM:0,
+    priceL:0
+
+  });
+
+  renderMenu();
+
+};
+
+
+window.saveMenu = async function(){
+
+  const shop =
+    document.getElementById("shopName").value.trim();
+
+  if(!shop){
+
+    alert("請先輸入店家名稱");
+
+    return;
+
+  }
+
+
+  await set(
+    ref(
+      db,
+      `/drinkOrders/${currentDate}/menu`
+    ),
+    menu
+  );
+
+
+  await set(
+    ref(
+      db,
+      `/drinkOrders/${currentDate}/shop`
+    ),
+    shop
+  );
+
+
+  alert("今日菜單已儲存");
+
+  renderDrinkSelect();
+
+};
+
+
+/*
+====================================================
+ 上傳圖片
+====================================================
+*/
+
+document
+  .getElementById("menuImage")
+  .addEventListener(
+    "change",
+    event=>{
+
+      const file =
+        event.target.files[0];
+
+      if(!file)return;
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        e=>{
+
+          const img =
+            document.getElementById(
+              "imagePreview"
+            );
+
+          img.src =
+            e.target.result;
+
+          img.classList.remove(
+            "hidden"
+          );
+
+        };
+
+      reader.readAsDataURL(file);
+
+    }
+  );
+
+
+/*
+====================================================
+ 人員
+====================================================
+*/
+
+function renderPeople(){
+
+  const box =
+    document.getElementById(
+      "peopleList"
+    );
+
+  box.innerHTML = "";
+
+  people.forEach(name=>{
+
+    const button =
+      document.createElement("button");
+
+    button.type = "button";
+
+    button.className =
+      "person " +
+      (activePerson === name
+        ? "active"
+        : "");
+
+    button.textContent = name;
+
+    button.onclick = ()=>{
+
+      activePerson = name;
+
+      document.getElementById(
+        "activePerson"
+      ).textContent = name;
+
+      document.getElementById(
+        "orderPicker"
+      ).classList.remove(
+        "hidden"
+      );
+
+      renderPeople();
+
+    };
+
+    box.appendChild(button);
+
+  });
+
+}
+
+
+window.addPerson = function(){
+
+  const input =
+    document.getElementById(
+      "newPerson"
+    );
+
+  const name =
+    input.value.trim();
+
+  if(
+    !name ||
+    people.includes(name)
+  )return;
+
+  people.push(name);
+
+  input.value = "";
+
+  renderPeople();
+
+};
+
+
+/*
+====================================================
+ 飲料選擇
+====================================================
+*/
+
+function renderDrinkSelect(){
+
+  const select =
+    document.getElementById(
+      "drinkSelect"
+    );
+
+  select.innerHTML = "";
+
+  menu.forEach((item,index)=>{
+
+    const option =
+      document.createElement("option");
+
+    option.value = index;
+
+    let price =
+      "$" + item.priceM;
+
+    if(item.priceL){
+
+      price +=
+        " / $" + item.priceL;
+
+    }
+
+    option.textContent =
+      item.name +
+      " " +
+      price;
+
+    select.appendChild(option);
+
+  });
+
+  renderSize();
+
+}
+
+
+function renderSize(){
+
+  const index =
+    Number(
+      document.getElementById(
+        "drinkSelect"
+      ).value
+    );
+
+  const item =
+    menu[index];
+
+  const select =
+    document.getElementById(
+      "sizeSelect"
+    );
+
+  select.innerHTML = "";
+
+  if(!item)return;
+
+
+  if(item.priceL){
+
+    const m =
+      document.createElement("option");
+
+    m.value =
+      item.priceM;
+
+    m.textContent =
+      "M $" +
+      item.priceM;
+
+    select.appendChild(m);
+
+
+    const l =
+      document.createElement("option");
+
+    l.value =
+      item.priceL;
+
+    l.textContent =
+      "L $" +
+      item.priceL;
+
+    select.appendChild(l);
+
+  }else{
+
+    const x =
+      document.createElement("option");
+
+    x.value =
+      item.priceM;
+
+    x.textContent =
+      "$" +
+      item.priceM;
+
+    select.appendChild(x);
+
+  }
+
+}
+
+
+document
+  .getElementById("drinkSelect")
+  .addEventListener(
+    "change",
+    renderSize
+  );
+
+
+/*
+====================================================
+ 加入訂單
+====================================================
+*/
+
+window.addOrder = async function(){
+
+  if(!activePerson){
+
+    alert("請先選擇姓名");
+
+    return;
+
+  }
+
+
+  if(!orderOpen){
+
+    alert("目前尚未開單");
+
+    return;
+
+  }
+
+
+  const index =
+    Number(
+      document.getElementById(
+        "drinkSelect"
+      ).value
+    );
+
+  const item =
+    menu[index];
+
+  if(!item)return;
+
+
+  const price =
+    Number(
+      document.getElementById(
+        "sizeSelect"
+      ).value
+    );
+
+
+  const topping =
+    document.getElementById(
+      "toppingSelect"
+    );
+
+
+  const toppingPrice =
+    Number(topping.value);
+
+
+  const order = {
+
+    person:
+      activePerson,
+
+    drink:
+      item.name,
+
+    size:
+      price === item.priceL &&
+      item.priceL
+        ? "L"
+        : "M",
+
+    sugar:
+      document.getElementById(
+        "sugarSelect"
+      ).value,
+
+    ice:
+      document.getElementById(
+        "iceSelect"
+      ).value,
+
+    topping:
+      topping.options[
+        topping.selectedIndex
+      ].textContent,
+
+    price:
+      price + toppingPrice,
+
+    createdAt:
+      Date.now()
+
+  };
+
+
+  const newRef =
+    push(
+      ref(
+        db,
+        `/drinkOrders/${currentDate}/orders`
+      )
+    );
+
+
+  await set(
+    newRef,
+    order
+  );
+
+};
+
+
+/*
+====================================================
+ 讀取 Firebase
+====================================================
+*/
+
+function listenOrders(){
+
+  const orderRef =
+    ref(
+      db,
+      `/drinkOrders/${currentDate}`
+    );
+
+
+  onValue(
+    orderRef,
+    snapshot=>{
+
+      const data =
+        snapshot.val();
+
+
+      if(!data)return;
+
+
+      if(data.shop){
+
+        document.getElementById(
+          "shopName"
+        ).value =
+          data.shop;
+
+      }
+
+
+      if(data.menu){
+
+        menu =
+          Array.isArray(data.menu)
+            ? data.menu
+            : Object.values(data.menu);
+
+        renderMenu();
+        renderDrinkSelect();
+
+      }
+
+
+      if(data.orders){
+
+        orders =
+          data.orders;
+
+      }else{
+
+        orders = {};
+
+      }
+
+
+      if(data.status){
+
+        orderOpen =
+          data.status === "open";
+
+        updateStatus();
+
+      }
+
+
+      renderOrders();
+
+    }
+  );
+
+}
+
+
+/*
+====================================================
+ 顯示訂單
+====================================================
+*/
+
+function renderOrders(){
+
+  const box =
+    document.getElementById(
+      "ordersList"
+    );
+
+  box.innerHTML = "";
+
+  const list =
+    Object.entries(orders);
+
+
+  document.getElementById(
+    "cupCount"
+  ).textContent =
+    list.length
+      ? `（${list.length} 杯）`
+      : "";
+
+
+  let total = 0;
+
+  const personTotal = {};
+
+
+  list.forEach(
+    ([id,o])=>{
+
+      total +=
+        Number(o.price) || 0;
+
+
+      personTotal[o.person] =
+        (personTotal[o.person] || 0)
+        + Number(o.price);
+
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+      div.className =
+        "order";
+
+
+      div.innerHTML = `
+
+        <div class="order-top">
+
+          <strong>
+            ${escapeHtml(o.person)}
+          </strong>
+
+          <strong>
+            $${o.price}
+          </strong>
+
+        </div>
+
+        <div>
+          ${escapeHtml(o.drink)}
+          ${o.size || ""}
+        </div>
+
+        <div class="order-detail">
+
+          ${escapeHtml(o.sugar)}
+          ・
+          ${escapeHtml(o.ice)}
+
+          ${
+            o.topping !== "不加料"
+              ? "・" +
+                escapeHtml(o.topping)
+              : ""
+          }
+
+        </div>
+
+        <button
+          type="button"
+          class="danger"
+          style="margin-top:7px"
+          onclick="deleteOrder('${id}')"
+        >
+          刪除
+        </button>
+
+      `;
+
+
+      box.appendChild(div);
+
+    }
+  );
+
+
+  document.getElementById(
+    "totalMoney"
+  ).textContent =
+    "$" + total;
+
+
+  document.getElementById(
+    "personMoney"
+  ).innerHTML =
+    Object.entries(personTotal)
+      .map(
+        ([name,money])=>
+          `${escapeHtml(name)}：$${money}`
+      )
+      .join("　｜　");
+
+
+  generateLineText();
+
+}
+
+
+window.deleteOrder = async function(id){
+
+  if(!confirm("確定要刪除這筆訂單？"))
+    return;
+
+
+  await set(
+    ref(
+      db,
+      `/drinkOrders/${currentDate}/orders/${id}`
+    ),
+    null
+  );
+
+};
+
+
+/*
+====================================================
+ LINE
+====================================================
+*/
+
+function generateLineText(){
+
+  const shop =
+    document.getElementById(
+      "shopName"
+    ).value ||
+    "今日飲料";
+
+
+  let text =
+    `🥤 ${shop} 今日飲料\n\n`;
+
+
+  const list =
+    Object.values(orders);
+
+
+  list.forEach(o=>{
+
+    text +=
+      `${o.person}｜` +
+      `${o.drink}` +
+      `${o.size ? "｜"+o.size : ""}` +
+      `｜${o.sugar}` +
+      `｜${o.ice}` +
+      `${
+        o.topping !== "不加料"
+          ? "｜"+o.topping
+          : ""
+      }` +
+      `｜$${o.price}\n`;
+
+  });
+
+
+  const total =
+    list.reduce(
+      (sum,o)=>
+        sum + Number(o.price || 0),
+      0
+    );
+
+
+  text +=
+    `\n共 ${list.length} 杯｜$${total}`;
+
+
+  document.getElementById(
+    "lineText"
+  ).value =
+    list.length
+      ? text
+      : "";
+
+}
+
+
+window.copyLine = async function(){
+
+  const text =
+    document.getElementById(
+      "lineText"
+    ).value;
+
+  if(!text)return;
+
+
+  try{
+
+    await navigator.clipboard.writeText(
+      text
+    );
+
+    alert("已複製，可以貼到 LINE");
+
+  }catch{
+
+    alert(
+      "請長按文字後手動複製"
+    );
+
+  }
+
+};
+
+
+/*
+====================================================
+ 開單／結單
+====================================================
+*/
+
+window.toggleOrderStatus =
+  async function(){
+
+    orderOpen =
+      !orderOpen;
+
+
+    await set(
+      ref(
+        db,
+        `/drinkOrders/${currentDate}/status`
+      ),
+      orderOpen
+        ? "open"
+        : "closed"
+    );
+
+
+    updateStatus();
+
+  };
+
+
+function updateStatus(){
+
+  const el =
+    document.getElementById(
+      "orderStatus"
+    );
+
+
+  if(orderOpen){
+
+    el.textContent =
+      "🟢 正在開放訂購";
+
+    el.className =
+      "status open";
+
+  }else{
+
+    el.textContent =
+      "🔒 尚未開放／已結單";
+
+    el.className =
+      "status closed";
+
+  }
+
+}
+
+
+/*
+====================================================
+ 工具
+====================================================
+*/
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+/*
+====================================================
+ 啟動
+====================================================
+*/
+
+renderMenu();
+
+renderPeople();
+
+renderDrinkSelect();
+
+listenOrders();
+
+</script>
+
+</body>
+</html>
