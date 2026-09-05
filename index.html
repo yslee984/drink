@@ -214,7 +214,13 @@ function startSync() {
   setInterval(async () => {
     const res = await dbGet("drinkOrdersSelfKey/" + currentDate);
     if (res) {
-      if (res.shopName !== undefined) document.getElementById("shopName").value = res.shopName;
+      // 關鍵修復：只有當使用者「沒有點選/正在輸入」店家名稱輸入框時，才更新其值
+      const shopInput = document.getElementById("shopName");
+      if (res.shopName !== undefined && document.activeElement !== shopInput) {
+        shopInput.value = res.shopName;
+        data.shopName = res.shopName;
+      }
+      
       if (res.menuImg && res.menuImg !== data.menuImg) {
         data.menuImg = res.menuImg;
         document.getElementById("menuImg").src = data.menuImg;
@@ -230,6 +236,7 @@ function startSync() {
 async function updateShopName() {
   data.shopName = document.getElementById("shopName").value.trim();
   await dbPatch("drinkOrdersSelfKey/" + currentDate, { shopName: data.shopName });
+  toast("✅ 已更新店家名稱！");
 }
 
 /* 圖片上傳與放大 */
