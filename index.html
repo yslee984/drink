@@ -1,22 +1,40 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
 <meta name="theme-color" content="#ffffff">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style"
+      content="default">
+
+<meta name="apple-mobile-web-app-title"
+      content="飲料團購">
 
 <title>🥤 飲料團購</title>
 
+
 <style>
+
+/* =====================================================
+   基本
+===================================================== */
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  padding: 16px;
+  padding: 12px;
+  background: #f5f6f8;
+  color: #222;
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -24,8 +42,6 @@ body {
     "Noto Sans TC",
     Arial,
     sans-serif;
-  background: #f5f6f8;
-  color: #222;
 }
 
 .container {
@@ -33,8 +49,16 @@ body {
   margin: auto;
 }
 
+.card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+
 h1 {
-  margin: 4px 0 4px;
+  margin: 0;
   font-size: 28px;
 }
 
@@ -45,21 +69,11 @@ h2 {
 
 h3 {
   margin: 0 0 10px;
-  font-size: 17px;
 }
 
 .subtitle {
+  margin-top: 6px;
   color: #777;
-  font-size: 14px;
-  margin-bottom: 18px;
-}
-
-.card {
-  background: white;
-  border-radius: 16px;
-  padding: 18px;
-  margin-bottom: 14px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 .row {
@@ -84,35 +98,29 @@ input,
 select,
 textarea {
   width: 100%;
+  padding: 11px 12px;
   border: 1px solid #ddd;
   border-radius: 10px;
-  padding: 11px 12px;
   font-size: 15px;
   background: white;
 }
 
 textarea {
-  min-height: 130px;
-  resize: vertical;
+  min-height: 180px;
 }
 
 button {
   border: 0;
   border-radius: 10px;
   padding: 11px 15px;
-  font-size: 15px;
-  cursor: pointer;
   background: #222;
   color: white;
+  font-size: 15px;
+  cursor: pointer;
 }
 
-button:active {
-  transform: scale(0.98);
-}
-
-button.secondary {
-  background: #eee;
-  color: #333;
+button:hover {
+  opacity: .9;
 }
 
 button.green {
@@ -123,12 +131,17 @@ button.red {
   background: #d9534f;
 }
 
-button.orange {
-  background: #e08a00;
+button.blue {
+  background: #3976cf;
 }
 
-button.blue {
-  background: #3d73c9;
+button.orange {
+  background: #df8b00;
+}
+
+button.gray {
+  background: #eee;
+  color: #333;
 }
 
 button.small {
@@ -140,166 +153,103 @@ button.full {
   width: 100%;
 }
 
+.hidden {
+  display: none !important;
+}
+
+
+/* =====================================================
+   狀態
+===================================================== */
+
 .status {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
+  display: inline-block;
+  margin-top: 15px;
+  padding: 7px 12px;
   border-radius: 20px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .status.open {
-  background: #e7f7ed;
-  color: #20844a;
+  background: #e5f7ed;
+  color: #21834b;
 }
 
 .status.closed {
-  background: #fceaea;
-  color: #b33a3a;
+  background: #fbe7e7;
+  color: #b33c3c;
 }
 
-.menu-image {
+
+/* =====================================================
+   管理區
+===================================================== */
+
+.admin {
+  border: 2px dashed #ddd;
+}
+
+.notice {
+  padding: 12px;
+  border-radius: 10px;
+  background: #fff7dc;
+  border: 1px solid #f0dc94;
+  color: #735d00;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.success {
+  padding: 12px;
+  border-radius: 10px;
+  background: #eaf8ef;
+  border: 1px solid #b9e4c7;
+  color: #25733f;
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   菜單圖片
+===================================================== */
+
+.menu-preview {
   width: 100%;
-  max-height: 500px;
+  max-height: 600px;
   object-fit: contain;
-  border-radius: 12px;
   margin-top: 12px;
-  background: #f3f3f3;
+  border-radius: 12px;
+  background: #f4f4f4;
   display: none;
 }
 
-.category {
-  margin-top: 20px;
-}
 
-.category-title {
-  font-size: 17px;
-  font-weight: 700;
-  padding-bottom: 8px;
-  border-bottom: 2px solid #eee;
-  margin-bottom: 8px;
-}
+/* =====================================================
+   人員
+===================================================== */
 
-.menu-item {
-  border-bottom: 1px solid #eee;
-  padding: 10px 0;
-}
-
-.menu-item:last-child {
-  border-bottom: 0;
-}
-
-.menu-item-name {
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.price-line {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  font-size: 14px;
-  color: #555;
-}
-
-.price-tag {
-  background: #f3f3f3;
-  border-radius: 8px;
-  padding: 5px 8px;
-}
-
-.name-list {
+.people-list {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.name-btn {
+.person-btn {
   background: #f1f3f5;
   color: #333;
   border: 1px solid #ddd;
 }
 
-.name-btn.selected {
+.person-btn.selected {
   background: #222;
   color: white;
 }
 
-.order-box {
-  background: #fafafa;
-  border-radius: 12px;
-  padding: 14px;
-  margin-top: 12px;
-}
 
-.total-box {
-  background: #222;
-  color: white;
-  border-radius: 14px;
-  padding: 18px;
-  margin-top: 14px;
-}
-
-.total-number {
-  font-size: 30px;
-  font-weight: 700;
-}
-
-.order-row {
-  border-bottom: 1px solid #eee;
-  padding: 12px 0;
-}
-
-.order-row:last-child {
-  border-bottom: 0;
-}
-
-.order-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-}
-
-.order-name {
-  font-weight: 700;
-  font-size: 16px;
-}
-
-.order-detail {
-  color: #666;
-  font-size: 14px;
-  margin-top: 5px;
-  line-height: 1.6;
-}
-
-.price {
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.admin-panel {
-  border: 2px dashed #ddd;
-  background: #fafafa;
-}
-
-.editor-row {
-  display: grid;
-  grid-template-columns: 1fr 90px 90px 50px;
-  gap: 6px;
-  margin-bottom: 7px;
-}
-
-.editor-row input {
-  padding: 8px;
-  font-size: 14px;
-}
+/* =====================================================
+   菜單編輯器
+===================================================== */
 
 .category-editor {
   border: 1px solid #eee;
@@ -308,362 +258,577 @@ button.full {
   margin-bottom: 12px;
 }
 
-.category-editor-title {
+.category-header {
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
+  align-items: center;
   margin-bottom: 10px;
 }
 
-.empty {
-  text-align: center;
-  color: #999;
-  padding: 20px 0;
+.drink-editor {
+  display: grid;
+  grid-template-columns: 1fr 75px 75px 42px;
+  gap: 6px;
+  margin-bottom: 7px;
 }
 
-.notice {
-  background: #fff8df;
-  border: 1px solid #f2df98;
-  color: #765d00;
-  padding: 11px 13px;
+.drink-editor input {
+  padding: 8px;
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   訂單
+===================================================== */
+
+.order-person {
+  padding: 13px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-person:last-child {
+  border-bottom: 0;
+}
+
+.person-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.order-item {
+  margin-top: 8px;
+  padding: 10px;
+  background: #f8f8f8;
   border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.order-actions {
+  margin-top: 5px;
+}
+
+.price {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.total-box {
+  margin-top: 15px;
+  padding: 18px;
+  background: #222;
+  color: white;
+  border-radius: 14px;
+}
+
+.total-number {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   Toast
+===================================================== */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 25px;
+  transform: translateX(-50%);
+  background: #222;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 30px;
+  font-size: 14px;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s;
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+
+/* =====================================================
+   OCR
+===================================================== */
+
+.ocr-result {
+  margin-top: 12px;
+  background: #f7f7f7;
+  border-radius: 10px;
+  padding: 12px;
+  white-space: pre-wrap;
   font-size: 13px;
   line-height: 1.6;
+  max-height: 300px;
+  overflow: auto;
 }
 
-.success {
-  background: #edf9f1;
-  border: 1px solid #b9e5c7;
-  color: #277442;
-  padding: 11px 13px;
-  border-radius: 10px;
-  font-size: 13px;
-}
 
-.loading {
-  color: #777;
-  text-align: center;
-  padding: 15px;
-}
+/* =====================================================
+   手機
+===================================================== */
 
-@media (max-width: 600px) {
+@media(max-width:600px) {
+
   body {
-    padding: 10px;
+    padding: 8px;
   }
 
   .card {
     padding: 14px;
-    border-radius: 14px;
+    border-radius: 15px;
   }
 
   h1 {
     font-size: 24px;
   }
 
-  .editor-row {
-    grid-template-columns: 1fr 65px 65px 42px;
+  .drink-editor {
+    grid-template-columns:
+      1fr 62px 62px 38px;
   }
 
   button {
     padding: 10px 12px;
   }
+
 }
+
 </style>
+
 </head>
+
 
 <body>
 
 <div class="container">
 
-  <!-- 標題 -->
-  <div class="card">
-    <h1>🥤 飲料團購</h1>
-    <div class="subtitle">
-      今天一起訂飲料
-    </div>
 
-    <div class="row">
-      <div class="field">
-        <label>店家</label>
-        <input id="shopName" value="迷客夏 Milksha">
-      </div>
+<!-- =====================================================
+     標題
+===================================================== -->
 
-      <div class="field">
-        <label>日期</label>
-        <input id="orderDate" type="date">
-      </div>
-    </div>
+<div class="card">
 
-    <div style="margin-top:12px;">
-      <span id="statusBadge" class="status open">
-        ● 訂購中
-      </span>
-    </div>
+  <h1>🥤 飲料團購</h1>
+
+  <div class="subtitle">
+    今天一起訂飲料
   </div>
 
 
-  <!-- 管理區 -->
-  <div class="card admin-panel">
+  <div style="height:15px;"></div>
 
-    <h2>⚙️ 管理區</h2>
 
-    <div class="notice">
-      這裡是開團的人使用的區域。<br>
-      可以上傳今天菜單、修改菜單，並決定是否開放大家訂購。
-    </div>
+  <div class="row">
 
-    <div style="height:12px;"></div>
+    <div class="field">
 
-    <div class="row">
+      <label>店家</label>
 
-      <div class="field">
-        <label>上傳今日菜單</label>
-        <input
-          id="menuImage"
-          type="file"
-          accept="image/*"
-        >
-      </div>
-
-      <div style="display:flex;align-items:end;gap:8px;">
-        <button
-          class="blue"
-          onclick="recognizeMenu()"
-        >
-          🤖 菜單辨識
-        </button>
-
-        <button
-          class="green"
-          onclick="saveMenu()"
-        >
-          💾 發布今日菜單
-        </button>
-      </div>
+      <input
+        id="shopName"
+        placeholder="例如：得正"
+      >
 
     </div>
 
-    <img id="menuPreview" class="menu-image">
 
-    <div style="height:14px;"></div>
+    <div class="field">
+
+      <label>日期</label>
+
+      <input
+        id="orderDate"
+        type="date"
+      >
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="statusBadge"
+    class="status open"
+  >
+    ● 訂購中
+  </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     管理區
+===================================================== -->
+
+<div class="card admin">
+
+  <h2>⚙️ 管理區</h2>
+
+
+  <div class="notice">
+
+    這裡是開團的人使用的區域。<br>
+
+    可以上傳今天菜單、辨識菜單、修改菜單，
+    然後發布給大家一起訂購。
+
+  </div>
+
+
+  <div style="height:15px;"></div>
+
+
+  <label>
+    上傳今日菜單
+  </label>
+
+
+  <div class="row">
+
+    <div class="field">
+
+      <input
+        id="menuImage"
+        type="file"
+        accept="image/*"
+      >
+
+    </div>
+
 
     <button
-      class="secondary"
-      onclick="toggleMenuEditor()"
+      class="blue"
+      onclick="runOCR()"
     >
-      ✏️ 編輯今日菜單
+      🤖 菜單辨識
     </button>
 
-    <div id="menuEditor" class="hidden" style="margin-top:15px;">
-      <div id="editorContainer"></div>
 
-      <div class="row">
-        <button class="secondary" onclick="addCategory()">
-          ＋ 新增分類
-        </button>
+    <button
+      class="green"
+      onclick="publishMenu()"
+    >
+      📤 發布今日菜單
+    </button>
 
-        <button class="green" onclick="saveMenu()">
-          儲存菜單
-        </button>
-      </div>
-    </div>
+  </div>
 
-    <div style="height:12px;"></div>
+
+  <img
+    id="menuPreview"
+    class="menu-preview"
+  >
+
+
+  <div
+    id="ocrStatus"
+    class="success hidden"
+    style="margin-top:12px;"
+  ></div>
+
+
+  <div
+    id="ocrResult"
+    class="ocr-result hidden"
+  ></div>
+
+
+  <div style="height:12px;"></div>
+
+
+  <button
+    class="gray"
+    onclick="toggleEditor()"
+  >
+    ✏️ 編輯今日菜單
+  </button>
+
+
+  <div
+    id="menuEditor"
+    class="hidden"
+    style="margin-top:15px;"
+  >
+
+    <div id="editorContainer"></div>
+
 
     <div class="row">
-      <button
-        class="green"
-        onclick="setOrderStatus(true)"
-      >
-        🔓 開始訂購
-      </button>
 
       <button
-        class="red"
-        onclick="setOrderStatus(false)"
+        class="gray"
+        onclick="addCategory()"
       >
-        🔒 關閉訂購
+        ＋ 新增分類
       </button>
+
+
+      <button
+        class="green"
+        onclick="publishMenu()"
+      >
+        💾 儲存菜單
+      </button>
+
     </div>
 
   </div>
 
 
-  <!-- 選擇姓名 -->
-  <div class="card">
+  <div style="height:15px;"></div>
 
-    <h2>👥 誰要喝？</h2>
 
-    <div class="name-list" id="nameList"></div>
+  <div class="row">
+
+    <button
+      class="green"
+      onclick="setOrderStatus(true)"
+    >
+      🔓 開始訂購
+    </button>
+
+
+    <button
+      class="red"
+      onclick="setOrderStatus(false)"
+    >
+      🔒 關閉訂購
+    </button>
+
+  </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     訂購人
+===================================================== -->
+
+<div class="card">
+
+  <h2>👥 誰要喝？</h2>
+
+
+  <div class="people-list"
+       id="peopleList">
+
+    <div style="color:#999;">
+      載入中……
+    </div>
+
+  </div>
+
+
+  <div style="height:12px;"></div>
+
+
+  <div class="row">
+
+    <div class="field">
+
+      <input
+        id="newPerson"
+        placeholder="輸入同事姓名"
+      >
+
+    </div>
+
+
+    <button
+      onclick="addPerson()"
+    >
+      ＋ 新增
+    </button>
+
+  </div>
+
+
+  <div style="height:10px;"></div>
+
+
+  <button
+    class="gray small"
+    onclick="loadPeopleFromFirebase()"
+  >
+    🔄 更新名單
+  </button>
+
+
+  <button
+    class="gray small"
+    onclick="useYesterdayPeople()"
+  >
+    📅 沿用昨天訂購者
+  </button>
+
+</div>
+
+
+
+<!-- =====================================================
+     點餐
+===================================================== -->
+
+<div class="card">
+
+  <h2>🧋 我要點飲料</h2>
+
+
+  <div
+    id="closedMessage"
+    class="notice hidden"
+  >
+    🔒 目前已關閉訂購。
+  </div>
+
+
+  <div id="orderForm">
+
+
+    <div class="field">
+
+      <label>飲料</label>
+
+      <select
+        id="drinkSelect"
+      ></select>
+
+    </div>
+
 
     <div style="height:10px;"></div>
 
+
     <div class="row">
 
-      <input
-        id="newName"
-        placeholder="輸入同事姓名"
-        style="flex:1;"
-      >
-
-      <button onclick="addName()">
-        ＋ 新增
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <!-- 點餐區 -->
-  <div class="card">
-
-    <h2>🧋 我要點飲料</h2>
-
-    <div id="closedMessage" class="notice hidden">
-      目前已關閉訂購。
-    </div>
-
-    <div id="orderForm">
 
       <div class="field">
-        <label>飲料</label>
-        <select id="drinkSelect"></select>
+
+        <label>大小</label>
+
+        <select id="sizeSelect">
+
+          <option value="M">
+            M
+          </option>
+
+          <option value="L">
+            L
+          </option>
+
+        </select>
+
       </div>
+
+
+      <div class="field">
+
+        <label>甜度</label>
+
+        <select id="sugarSelect">
+
+          <option>正常糖</option>
+          <option>少糖</option>
+          <option>半糖</option>
+          <option>微糖</option>
+          <option>無糖</option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>冰量</label>
+
+        <select id="iceSelect">
+
+          <option>正常冰</option>
+          <option>少冰</option>
+          <option>微冰</option>
+          <option>去冰</option>
+          <option>溫</option>
+          <option>熱</option>
+
+        </select>
+
+      </div>
+
+
+    </div>
+
+
+    <div style="height:12px;"></div>
+
+
+    <label>
+      加料
+    </label>
+
+
+    <div
+      id="toppingList"
+      class="people-list"
+    ></div>
+
+
+    <div style="height:15px;"></div>
+
+
+    <div class="order-box"
+         style="
+           background:#fafafa;
+           padding:14px;
+           border-radius:12px;
+         ">
+
+
+      <div
+        style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+        "
+      >
+
+        <strong>
+          本杯金額
+        </strong>
+
+        <span
+          id="currentPrice"
+          class="price"
+        >
+          $0
+        </span>
+
+      </div>
+
 
       <div style="height:10px;"></div>
 
-      <div class="row">
-
-        <div class="field">
-          <label>大小</label>
-          <select id="sizeSelect">
-            <option value="M">M</option>
-            <option value="L">L</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>甜度</label>
-          <select id="sugarSelect">
-            <option>正常糖</option>
-            <option>少糖</option>
-            <option>半糖</option>
-            <option>微糖</option>
-            <option>無糖</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>冰量</label>
-          <select id="iceSelect">
-            <option>正常冰</option>
-            <option>少冰</option>
-            <option>微冰</option>
-            <option>去冰</option>
-            <option>溫</option>
-            <option>熱</option>
-          </select>
-        </div>
-
-      </div>
-
-      <div style="height:12px;"></div>
-
-      <div class="field">
-        <label>加料</label>
-
-        <div id="toppingList" class="name-list"></div>
-      </div>
-
-      <div style="height:14px;"></div>
-
-      <div class="order-box">
-
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <strong>本杯金額</strong>
-          <span id="currentPrice" class="price">$0</span>
-        </div>
-
-        <div style="height:10px;"></div>
-
-        <button
-          class="full green"
-          onclick="addOrder()"
-        >
-          🛒 加入我的訂單
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- 訂單 -->
-  <div class="card">
-
-    <h2>📋 今日訂單</h2>
-
-    <div id="ordersContainer">
-      <div class="loading">
-        載入訂單中……
-      </div>
-    </div>
-
-    <div class="total-box">
-
-      <div>目前總金額</div>
-
-      <div class="total-number" id="totalAmount">
-        $0
-      </div>
-
-      <div style="height:12px;"></div>
 
       <button
-        class="full"
-        onclick="generateLineMessage()"
+        class="green full"
+        onclick="addOrder()"
       >
-        📋 產生 LINE 訂單訊息
+        🛒 加入我的訂單
       </button>
 
-    </div>
 
-  </div>
-
-
-  <!-- LINE -->
-  <div class="card">
-
-    <h2>💬 LINE 訂單訊息</h2>
-
-    <textarea
-      id="lineMessage"
-      readonly
-      placeholder="按上面的按鈕產生訂單訊息……"
-    ></textarea>
-
-    <div style="height:10px;"></div>
-
-    <button
-      class="full blue"
-      onclick="copyLineMessage()"
-    >
-      📋 複製訊息
-    </button>
-
-  </div>
-
-
-  <!-- 系統資訊 -->
-  <div class="card">
-
-    <div style="font-size:13px;color:#888;line-height:1.7;">
-      <strong>系統狀態</strong><br>
-      Firebase：<span id="firebaseStatus">連線中……</span><br>
-      最後同步：<span id="lastSync">—</span>
     </div>
 
   </div>
@@ -671,418 +836,981 @@ button.full {
 </div>
 
 
+
+<!-- =====================================================
+     今日訂單
+===================================================== -->
+
+<div class="card">
+
+  <h2>📋 今日訂單</h2>
+
+
+  <div id="ordersContainer">
+
+    <div style="
+      text-align:center;
+      color:#999;
+      padding:20px;
+    ">
+      載入訂單中……
+    </div>
+
+  </div>
+
+
+  <div class="total-box">
+
+    <div>
+      目前總金額
+    </div>
+
+
+    <div
+      id="totalAmount"
+      class="total-number"
+    >
+      $0
+    </div>
+
+
+    <div style="height:12px;"></div>
+
+
+    <button
+      class="full"
+      onclick="generateLineMessage()"
+    >
+      📋 產生 LINE 訂單訊息
+    </button>
+
+  </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     LINE
+===================================================== -->
+
+<div class="card">
+
+  <h2>💬 LINE 訂單訊息</h2>
+
+
+  <textarea
+    id="lineMessage"
+    readonly
+    placeholder="產生後可以直接複製貼到 LINE"
+  ></textarea>
+
+
+  <div style="height:10px;"></div>
+
+
+  <button
+    class="blue full"
+    onclick="copyLineMessage()"
+  >
+    📋 複製訊息
+  </button>
+
+</div>
+
+
+
+<!-- =====================================================
+     系統
+===================================================== -->
+
+<div class="card">
+
+  <div
+    style="
+      font-size:13px;
+      color:#777;
+      line-height:1.8;
+    "
+  >
+
+    <strong>
+      系統狀態
+    </strong>
+
+    <br>
+
+    Firebase：
+    <span id="firebaseStatus">
+      連線中……
+    </span>
+
+    <br>
+
+    最後同步：
+    <span id="lastSync">
+      —
+    </span>
+
+  </div>
+
+</div>
+
+
+</div>
+
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+
+
+<!-- =====================================================
+     OCR 套件
+===================================================== -->
+
+<script src="
+https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js
+"></script>
+
+
+
 <script>
 
-/* =========================================================
-   Firebase Realtime Database
-   ========================================================= */
+/* =====================================================
+   Firebase
+===================================================== */
 
 const DATABASE_URL =
-  "https://my-family-calendar-219bb-default-rtdb.firebaseio.com";
+"https://my-family-calendar-219bb-default-rtdb.firebaseio.com";
+
+
+/*
+  所有飲料資料只放：
+
+  /drinkOrders/
+
+  不碰：
+
+  /calendar/
+*/
+
 
 let currentDate = "";
+
 let data = {
-  shopName: "迷客夏 Milksha",
+
+  shopName: "",
+
   isOpen: true,
+
   menu: [],
+
   orders: {}
+
 };
 
+
 let selectedName = "";
+
 let selectedToppings = [];
 
 
-/* =========================================================
+/* =====================================================
+   加料
+===================================================== */
+
+const toppings = [
+
+  {
+    name: "珍珠",
+    price: 10
+  },
+
+  {
+    name: "仙草凍",
+    price: 10
+  },
+
+  {
+    name: "綠茶凍",
+    price: 10
+  },
+
+  {
+    name: "蜂蜜黑糖粉粿",
+    price: 15
+  },
+
+  {
+    name: "荔荔椰果",
+    price: 15
+  }
+
+];
+
+
+/* =====================================================
    預設菜單
-   ========================================================= */
+===================================================== */
 
 const defaultMenu = [
 
   {
     category: "季節限定",
+
     items: [
-      { name: "荔荔茉莉", M: 50, L: 60 },
-      { name: "荔荔蜜桃椰果", M: 65, L: 75 },
-      { name: "荔多鮮奶果昔", M: 60, L: 70 },
-      { name: "蜜桃茉莉", M: 70, L: 80 },
-      { name: "夏嶼果茶", M: 65, L: 75 },
-      { name: "海鹽芒果綠", M: 65, L: 75 },
-      { name: "蔗杯紅柚凍飲", M: 75, L: 85 }
+
+      {
+        name: "荔荔茉莉",
+        M: 50,
+        L: 60
+      },
+
+      {
+        name: "荔荔蜜桃椰果",
+        M: 65,
+        L: 75
+      },
+
+      {
+        name: "荔多鮮奶果昔",
+        M: 60,
+        L: 70
+      },
+
+      {
+        name: "蜜桃茉莉",
+        M: 70,
+        L: 80
+      },
+
+      {
+        name: "夏嶼果茶",
+        M: 65,
+        L: 75
+      },
+
+      {
+        name: "海鹽芒果綠",
+        M: 65,
+        L: 75
+      },
+
+      {
+        name: "蔗杯紅柚凍飲",
+        M: 75,
+        L: 85
+      }
+
     ]
   },
+
 
   {
     category: "醇萃茶",
+
     items: [
-      { name: "蘭韻金萱", M: 45, L: 55 },
-      { name: "慕斯蘭韻金萱", M: 55, L: 65 },
-      { name: "娜杯紅茶", M: 40, L: 50 },
-      { name: "英倫伯爵紅茶", M: 35, L: 45 },
-      { name: "大正醇香紅茶", M: 35, L: 45 },
-      { name: "原片初露青茶", M: 35, L: 45 },
-      { name: "茉莉原淬綠茶", M: 35, L: 45 }
+
+      {
+        name: "蘭韻金萱",
+        M: 45,
+        L: 55
+      },
+
+      {
+        name: "慕斯蘭韻金萱",
+        M: 55,
+        L: 65
+      },
+
+      {
+        name: "娜杯紅茶",
+        M: 40,
+        L: 50
+      },
+
+      {
+        name: "英倫伯爵紅茶",
+        M: 35,
+        L: 45
+      },
+
+      {
+        name: "大正醇香紅茶",
+        M: 35,
+        L: 45
+      },
+
+      {
+        name: "原片初露青茶",
+        M: 35,
+        L: 45
+      },
+
+      {
+        name: "茉莉原淬綠茶",
+        M: 35,
+        L: 45
+      }
+
     ]
   },
+
 
   {
     category: "鮮調果茶",
+
     items: [
-      { name: "桂香原片青", M: 50, L: 60 },
-      { name: "桂香青梅蜂蜜粉粿", M: 65, L: 75 },
-      { name: "柳丁綠茶／青茶", M: 65, L: 75 },
-      { name: "白甘蔗青茶", M: 70, L: 80 },
-      { name: "青梅香茶", M: 70, L: 80 },
-      { name: "蜂蜜檸檬晶凍", M: 60, L: 70 },
-      { name: "香柚綠茶", M: 60, L: 70 },
-      { name: "養樂多多綠", M: 55, L: 65 },
-      { name: "冬瓜青茶", M: 55, L: 65 },
-      { name: "冰萃柳丁／檸檬", M: 65, L: 75 }
+
+      {
+        name: "桂香原片青",
+        M: 50,
+        L: 60
+      },
+
+      {
+        name: "桂香青梅蜂蜜粉粿",
+        M: 65,
+        L: 75
+      },
+
+      {
+        name: "柳丁綠茶／青茶",
+        M: 65,
+        L: 75
+      },
+
+      {
+        name: "白甘蔗青茶",
+        M: 70,
+        L: 80
+      },
+
+      {
+        name: "青梅香茶",
+        M: 70,
+        L: 80
+      },
+
+      {
+        name: "蜂蜜檸檬晶凍",
+        M: 60,
+        L: 70
+      },
+
+      {
+        name: "香柚綠茶",
+        M: 60,
+        L: 70
+      },
+
+      {
+        name: "養樂多多綠",
+        M: 55,
+        L: 65
+      },
+
+      {
+        name: "冬瓜青茶",
+        M: 55,
+        L: 65
+      },
+
+      {
+        name: "冰萃柳丁／檸檬",
+        M: 65,
+        L: 75
+      }
+
     ]
   },
+
 
   {
     category: "醇濃鮮奶茶",
+
     items: [
-      { name: "蘭韻金萱拿鐵", M: 65, L: 85 },
-      { name: "慕斯金萱拿鐵", M: 75, L: 85 },
-      { name: "娜杯紅茶拿鐵", M: 55, L: 65 },
-      { name: "伯爵紅茶拿鐵", M: 50, L: 60 },
-      { name: "大正紅茶拿鐵", M: 50, L: 60 },
-      { name: "茉香綠茶拿鐵", M: 50, L: 60 },
-      { name: "原片青茶拿鐵", M: 50, L: 60 },
-      { name: "珍珠紅茶拿鐵（伯爵／大正）", M: 60, L: 70 },
-      { name: "珍珠娜杯紅茶拿鐵", M: 65, L: 75 }
+
+      {
+        name: "蘭韻金萱拿鐵",
+        M: 65,
+        L: 85
+      },
+
+      {
+        name: "慕斯金萱拿鐵",
+        M: 75,
+        L: 85
+      },
+
+      {
+        name: "娜杯紅茶拿鐵",
+        M: 55,
+        L: 65
+      },
+
+      {
+        name: "伯爵紅茶拿鐵",
+        M: 50,
+        L: 60
+      },
+
+      {
+        name: "大正紅茶拿鐵",
+        M: 50,
+        L: 60
+      },
+
+      {
+        name: "茉香綠茶拿鐵",
+        M: 50,
+        L: 60
+      },
+
+      {
+        name: "原片青茶拿鐵",
+        M: 50,
+        L: 60
+      },
+
+      {
+        name: "珍珠紅茶拿鐵（伯爵／大正）",
+        M: 60,
+        L: 70
+      },
+
+      {
+        name: "珍珠娜杯紅茶拿鐵",
+        M: 65,
+        L: 75
+      }
+
     ]
   },
+
 
   {
     category: "無咖啡因",
+
     items: [
-      { name: "桂香輕蕎麥", M: 55, L: 65 },
-      { name: "輕鐵蕎麥茶", M: 45, L: 55 },
-      { name: "輕鐵蕎麥拿鐵", M: 65, L: 75 },
-      { name: "焙香決明大麥", M: 35, L: 45 },
-      { name: "焙香大麥拿鐵", M: 50, L: 60 },
-      { name: "原鄉冬瓜茶", M: 40, L: 50 },
-      { name: "冬瓜檸檬／麥茶", M: 55, L: 65 }
+
+      {
+        name: "桂香輕蕎麥",
+        M: 55,
+        L: 65
+      },
+
+      {
+        name: "輕鐵蕎麥茶",
+        M: 45,
+        L: 55
+      },
+
+      {
+        name: "輕鐵蕎麥拿鐵",
+        M: 65,
+        L: 75
+      },
+
+      {
+        name: "焙香決明大麥",
+        M: 35,
+        L: 45
+      },
+
+      {
+        name: "焙香大麥拿鐵",
+        M: 50,
+        L: 60
+      },
+
+      {
+        name: "原鄉冬瓜茶",
+        M: 40,
+        L: 50
+      },
+
+      {
+        name: "冬瓜檸檬／麥茶",
+        M: 55,
+        L: 65
+      }
+
     ]
   },
 
+
   {
     category: "醇濃綠光鮮奶",
+
     items: [
-      { name: "芋頭鮮奶", M: 65, L: 85 },
-      { name: "珍珠鮮奶", M: 65, L: 85 },
-      { name: "手炒黑糖鮮奶", M: 65, L: 85 },
-      { name: "嫩仙草凍奶", M: 65, L: 85 },
-      { name: "綠光純鮮奶家庭號", M: 169, L: 169 }
+
+      {
+        name: "芋頭鮮奶",
+        M: 65,
+        L: 85
+      },
+
+      {
+        name: "珍珠鮮奶",
+        M: 65,
+        L: 85
+      },
+
+      {
+        name: "手炒黑糖鮮奶",
+        M: 65,
+        L: 85
+      },
+
+      {
+        name: "嫩仙草凍奶",
+        M: 65,
+        L: 85
+      },
+
+      {
+        name: "綠光純鮮奶家庭號",
+        M: 169,
+        L: 169
+      }
+
     ]
   }
 
 ];
 
 
-/* =========================================================
-   加料
-   ========================================================= */
-
-const toppings = [
-  { name: "珍珠", price: 10 },
-  { name: "仙草凍", price: 10 },
-  { name: "綠茶凍", price: 10 },
-  { name: "蜂蜜黑糖粉粿", price: 15 },
-  { name: "荔荔椰果", price: 15 }
-];
-
-
-/* =========================================================
-   初始化
-   ========================================================= */
-
-document.addEventListener("DOMContentLoaded", async () => {
-
-  const today = new Date();
-
-  currentDate =
-    today.getFullYear() +
-    "-" +
-    String(today.getMonth() + 1).padStart(2, "0") +
-    "-" +
-    String(today.getDate()).padStart(2, "0");
-
-  document.getElementById("orderDate").value = currentDate;
-
-  document
-    .getElementById("orderDate")
-    .addEventListener("change", changeDate);
-
-  document
-    .getElementById("shopName")
-    .addEventListener("change", saveShopOnly);
-
-  document
-    .getElementById("menuImage")
-    .addEventListener("change", previewImage);
-
-  loadNames();
-
-  renderToppings();
-
-  await loadData();
-
-  startPolling();
-
-});
-
-
-/* =========================================================
+/* =====================================================
    Firebase REST
-   ========================================================= */
+===================================================== */
 
 function dbUrl(path) {
-  return DATABASE_URL + "/" + path + ".json";
+
+  return DATABASE_URL +
+    "/" +
+    path +
+    ".json";
+
 }
 
 
-async function firebaseGet(path) {
+async function dbGet(path) {
 
-  const response = await fetch(dbUrl(path));
+  const response =
+    await fetch(
+      dbUrl(path),
+      {
+        cache: "no-store"
+      }
+    );
 
   if (!response.ok) {
-    throw new Error("Firebase 讀取失敗");
+
+    throw new Error(
+      "Firebase 讀取失敗"
+    );
+
   }
 
   return await response.json();
+
 }
 
 
-async function firebasePut(path, value) {
+async function dbPut(path, value) {
 
-  const response = await fetch(
-    dbUrl(path),
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(value)
-    }
-  );
+  const response =
+    await fetch(
+      dbUrl(path),
+      {
+        method: "PUT",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify(value)
+      }
+    );
 
   if (!response.ok) {
-    throw new Error("Firebase 寫入失敗");
+
+    throw new Error(
+      "Firebase 寫入失敗"
+    );
+
   }
 
   return await response.json();
+
 }
 
 
-/* =========================================================
-   讀取今天資料
-   ========================================================= */
+async function dbPatch(path, value) {
 
-async function loadData() {
+  const response =
+    await fetch(
+      dbUrl(path),
+      {
+        method: "PATCH",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify(value)
+      }
+    );
+
+  if (!response.ok) {
+
+    throw new Error(
+      "Firebase 更新失敗"
+    );
+
+  }
+
+  return await response.json();
+
+}
+
+
+async function dbDelete(path) {
+
+  const response =
+    await fetch(
+      dbUrl(path),
+      {
+        method: "DELETE"
+      }
+    );
+
+  if (!response.ok) {
+
+    throw new Error(
+      "Firebase 刪除失敗"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   初始化
+===================================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  async function() {
+
+    const today =
+      new Date();
+
+    currentDate =
+      today.getFullYear() +
+      "-" +
+      String(
+        today.getMonth() + 1
+      ).padStart(2, "0") +
+      "-" +
+      String(
+        today.getDate()
+      ).padStart(2, "0");
+
+
+    document
+      .getElementById("orderDate")
+      .value =
+      currentDate;
+
+
+    document
+      .getElementById("orderDate")
+      .addEventListener(
+        "change",
+        changeDate
+      );
+
+
+    document
+      .getElementById("shopName")
+      .addEventListener(
+        "change",
+        saveShop
+      );
+
+
+    document
+      .getElementById("menuImage")
+      .addEventListener(
+        "change",
+        previewImage
+      );
+
+
+    document
+      .getElementById("drinkSelect")
+      .addEventListener(
+        "change",
+        updatePrice
+      );
+
+
+    document
+      .getElementById("sizeSelect")
+      .addEventListener(
+        "change",
+        updatePrice
+      );
+
+
+    renderToppings();
+
+    await loadToday();
+
+    await loadPeopleFromFirebase();
+
+    startSync();
+
+  }
+);
+
+
+/* =====================================================
+   載入今日資料
+===================================================== */
+
+async function loadToday() {
 
   try {
 
     const result =
-      await firebaseGet("drinkOrders/" + currentDate);
+      await dbGet(
+        "drinkOrders/" +
+        currentDate
+      );
+
 
     if (result) {
 
-      data = {
-        shopName:
-          result.shopName ||
-          document.getElementById("shopName").value,
+      data.shopName =
+        result.shopName ||
+        "";
 
-        isOpen:
-          result.isOpen !== false,
+      data.isOpen =
+        result.isOpen !== false;
 
-        menu:
-          result.menu ||
-          defaultMenu,
+      data.menu =
+        result.menu ||
+        clone(defaultMenu);
 
-        orders:
-          result.orders ||
-          {}
-      };
-
-    } else {
-
-      data = {
-        shopName:
-          document.getElementById("shopName").value,
-
-        isOpen: true,
-
-        menu: defaultMenu,
-
-        orders: {}
-      };
-
-      await saveAll();
+      data.orders =
+        result.orders ||
+        {};
 
     }
 
-    document.getElementById("shopName").value =
+    else {
+
+      data.shopName = "";
+
+      data.isOpen = true;
+
+      data.menu =
+        clone(defaultMenu);
+
+      data.orders = {};
+
+
+      await dbPut(
+        "drinkOrders/" +
+        currentDate,
+
+        {
+          shopName: "",
+          isOpen: true,
+          menu: data.menu
+        }
+      );
+
+    }
+
+
+    document
+      .getElementById("shopName")
+      .value =
       data.shopName;
 
-    renderEverything();
 
-    document.getElementById("firebaseStatus").textContent =
+    renderAll();
+
+
+    document
+      .getElementById(
+        "firebaseStatus"
+      )
+      .textContent =
       "已連線";
 
-  } catch (error) {
+
+  }
+
+  catch(error) {
 
     console.error(error);
 
-    document.getElementById("firebaseStatus").textContent =
+    document
+      .getElementById(
+        "firebaseStatus"
+      )
+      .textContent =
       "連線失敗";
 
-    /*
-      如果 Firebase 目前還沒有資料，
-      仍然讓網頁可以使用預設菜單。
-    */
-
-    data = {
-      shopName:
-        document.getElementById("shopName").value,
-
-      isOpen: true,
-
-      menu: defaultMenu,
-
-      orders: {}
-    };
-
-    renderEverything();
   }
+
 }
 
 
-/* =========================================================
-   儲存全部資料
-   ========================================================= */
+/* =====================================================
+   即時同步
+===================================================== */
 
-async function saveAll() {
+function startSync() {
 
-  try {
+  setInterval(
+    async function() {
 
-    await firebasePut(
-      "drinkOrders/" + currentDate,
-      {
-        shopName: data.shopName,
-        isOpen: data.isOpen,
-        menu: data.menu,
-        orders: data.orders
-      }
-    );
+      try {
 
-    document.getElementById("lastSync").textContent =
-      new Date().toLocaleTimeString();
-
-    document.getElementById("firebaseStatus").textContent =
-      "已連線";
-
-  } catch (error) {
-
-    console.error(error);
-
-    document.getElementById("firebaseStatus").textContent =
-      "寫入失敗";
-
-    alert(
-      "無法儲存到 Firebase。\n\n" +
-      "請檢查 Firebase Realtime Database 的 Rules 是否允許讀寫。"
-    );
-  }
-}
+        const result =
+          await dbGet(
+            "drinkOrders/" +
+            currentDate +
+            "/orders"
+          );
 
 
-/* =========================================================
-   每 2 秒同步一次
-   ========================================================= */
+        data.orders =
+          result || {};
 
-function startPolling() {
 
-  setInterval(async () => {
+        renderOrders();
 
-    try {
 
-      const result =
-        await firebaseGet(
-          "drinkOrders/" + currentDate
-        );
+        document
+          .getElementById(
+            "lastSync"
+          )
+          .textContent =
+          new Date()
+            .toLocaleTimeString();
 
-      if (result) {
 
-        data = {
-          shopName:
-            result.shopName ||
-            data.shopName,
-
-          isOpen:
-            result.isOpen !== false,
-
-          menu:
-            result.menu ||
-            defaultMenu,
-
-          orders:
-            result.orders ||
-            {}
-        };
-
-        renderEverything();
-
-        document.getElementById("lastSync").textContent =
-          new Date().toLocaleTimeString();
-
-        document.getElementById("firebaseStatus").textContent =
+        document
+          .getElementById(
+            "firebaseStatus"
+          )
+          .textContent =
           "已連線";
+
       }
 
-    } catch (error) {
+      catch(error) {
 
-      document.getElementById("firebaseStatus").textContent =
-        "同步失敗";
-    }
+        document
+          .getElementById(
+            "firebaseStatus"
+          )
+          .textContent =
+          "同步失敗";
 
-  }, 2000);
+      }
+
+    },
+    1500
+  );
+
 }
 
 
-/* =========================================================
-   日期改變
-   ========================================================= */
+/* =====================================================
+   日期
+===================================================== */
 
 async function changeDate() {
 
   currentDate =
-    document.getElementById("orderDate").value;
+    document
+      .getElementById(
+        "orderDate"
+      )
+      .value;
+
 
   if (!currentDate) return;
 
-  await loadData();
+
+  await loadToday();
+
 }
 
 
-/* =========================================================
-   店家名稱
-   ========================================================= */
+/* =====================================================
+   店家
+===================================================== */
 
-async function saveShopOnly() {
+async function saveShop() {
 
   data.shopName =
-    document.getElementById("shopName").value.trim();
+    document
+      .getElementById(
+        "shopName"
+      )
+      .value
+      .trim();
 
-  await saveAll();
+
+  try {
+
+    await dbPatch(
+      "drinkOrders/" +
+      currentDate,
+
+      {
+        shopName:
+          data.shopName
+      }
+    );
+
+    toast(
+      "店家名稱已更新"
+    );
+
+  }
+
+  catch(error) {
+
+    alert(
+      "無法儲存店家名稱"
+    );
+
+  }
+
 }
 
 
-/* =========================================================
-   菜單圖片預覽
-   ========================================================= */
+/* =====================================================
+   圖片預覽
+===================================================== */
 
 function previewImage(event) {
 
@@ -1091,235 +1819,501 @@ function previewImage(event) {
 
   if (!file) return;
 
+
   const reader =
     new FileReader();
 
-  reader.onload = function(e) {
 
-    const img =
-      document.getElementById("menuPreview");
+  reader.onload =
+    function(e) {
 
-    img.src = e.target.result;
-    img.style.display = "block";
+      const image =
+        document
+          .getElementById(
+            "menuPreview"
+          );
 
-  };
+
+      image.src =
+        e.target.result;
+
+
+      image.style.display =
+        "block";
+
+    };
+
 
   reader.readAsDataURL(file);
+
 }
 
 
-/* =========================================================
-   菜單辨識
-   ========================================================= */
+/* =====================================================
+   OCR
+===================================================== */
 
-function recognizeMenu() {
+async function runOCR() {
 
-  alert(
-    "🤖 菜單 AI 辨識功能\n\n" +
-    "目前這個版本先保留按鈕與完整流程。\n\n" +
-    "下一階段可以接 AI，讓你：\n\n" +
-    "① 上傳今天菜單照片\n" +
-    "② AI 自動讀取飲料名稱\n" +
-    "③ 自動讀取 M / L 價格\n" +
-    "④ 自動分類\n" +
-    "⑤ 你確認後直接發布\n\n" +
-    "⚠️ AI API 金鑰不能直接放在 GitHub Pages，" +
-    "所以需要另外接一個安全的後端。"
-  );
-}
+  const file =
+    document
+      .getElementById(
+        "menuImage"
+      )
+      .files[0];
 
 
-/* =========================================================
-   儲存菜單
-   ========================================================= */
+  if (!file) {
 
-async function saveMenu() {
+    alert(
+      "請先選擇菜單圖片。"
+    );
 
-  const editor =
-    document.getElementById("editorContainer");
-
-  if (!editor.children.length) {
-
-    data.menu =
-      JSON.parse(
-        JSON.stringify(defaultMenu)
-      );
-
-  } else {
-
-    data.menu =
-      readMenuFromEditor();
+    return;
 
   }
+
+
+  const status =
+    document
+      .getElementById(
+        "ocrStatus"
+      );
+
+
+  const result =
+    document
+      .getElementById(
+        "ocrResult"
+      );
+
+
+  status.classList.remove(
+    "hidden"
+  );
+
+
+  result.classList.remove(
+    "hidden"
+  );
+
+
+  status.textContent =
+    "🤖 正在辨識菜單，請稍候……";
+
+
+  result.textContent =
+    "";
+
+
+  try {
+
+    const worker =
+      await Tesseract.createWorker(
+        "chi_tra+eng"
+      );
+
+
+    const output =
+      await worker.recognize(
+        file
+      );
+
+
+    const text =
+      output.data.text;
+
+
+    result.textContent =
+      text;
+
+
+    await worker.terminate();
+
+
+    status.textContent =
+      "✅ OCR 辨識完成。請檢查下方文字，再使用「編輯今日菜單」修正菜單。";
+
+
+  }
+
+  catch(error) {
+
+    console.error(error);
+
+    status.textContent =
+      "❌ 辨識失敗，請重新上傳圖片。";
+
+  }
+
+}
+
+
+/* =====================================================
+   發布菜單
+===================================================== */
+
+async function publishMenu() {
 
   data.shopName =
-    document.getElementById("shopName").value.trim();
-
-  await saveAll();
-
-  renderDrinkSelect();
-
-  alert("✅ 今日菜單已儲存！");
-}
+    document
+      .getElementById(
+        "shopName"
+      )
+      .value
+      .trim();
 
 
-/* =========================================================
-   顯示／隱藏編輯器
-   ========================================================= */
+  if (!data.shopName) {
 
-function toggleMenuEditor() {
+    alert(
+      "請先輸入店家名稱。"
+    );
 
-  const editor =
-    document.getElementById("menuEditor");
-
-  editor.classList.toggle("hidden");
-
-  if (!editor.classList.contains("hidden")) {
-
-    renderMenuEditor();
+    return;
 
   }
-}
 
 
-/* =========================================================
-   菜單編輯器
-   ========================================================= */
+  try {
 
-function renderMenuEditor() {
+    await dbPatch(
+      "drinkOrders/" +
+      currentDate,
 
-  const container =
-    document.getElementById("editorContainer");
+      {
+        shopName:
+          data.shopName,
 
-  container.innerHTML = "";
-
-  data.menu.forEach((category, categoryIndex) => {
-
-    const box =
-      document.createElement("div");
-
-    box.className =
-      "category-editor";
-
-    box.innerHTML = `
-      <div class="category-editor-title">
-        <input
-          value="${escapeHtml(category.category)}"
-          placeholder="分類名稱"
-          onchange="updateCategoryName(${categoryIndex}, this.value)"
-        >
-
-        <button
-          class="red small"
-          onclick="deleteCategory(${categoryIndex})"
-        >
-          刪除分類
-        </button>
-      </div>
-
-      <div id="category-${categoryIndex}"></div>
-
-      <button
-        class="secondary small"
-        onclick="addDrink(${categoryIndex})"
-      >
-        ＋ 新增飲料
-      </button>
-    `;
-
-    container.appendChild(box);
-
-    const drinkContainer =
-      box.querySelector(
-        "#category-" + categoryIndex
-      );
-
-    category.items.forEach(
-      (item, itemIndex) => {
-
-        const row =
-          document.createElement("div");
-
-        row.className =
-          "editor-row";
-
-        row.innerHTML = `
-
-          <input
-            value="${escapeHtml(item.name)}"
-            placeholder="飲料名稱"
-            onchange="updateDrink(${categoryIndex}, ${itemIndex}, 'name', this.value)"
-          >
-
-          <input
-            type="number"
-            value="${item.M}"
-            placeholder="M"
-            onchange="updateDrink(${categoryIndex}, ${itemIndex}, 'M', this.value)"
-          >
-
-          <input
-            type="number"
-            value="${item.L}"
-            placeholder="L"
-            onchange="updateDrink(${categoryIndex}, ${itemIndex}, 'L', this.value)"
-          >
-
-          <button
-            class="red small"
-            onclick="deleteDrink(${categoryIndex}, ${itemIndex})"
-          >
-            ×
-          </button>
-        `;
-
-        drinkContainer.appendChild(row);
-
+        menu:
+          data.menu
       }
     );
 
-  });
 
-}
-
-
-function updateCategoryName(index, value) {
-
-  data.menu[index].category =
-    value.trim();
-
-}
+    toast(
+      "✅ 今日菜單已發布"
+    );
 
 
-function updateDrink(categoryIndex, itemIndex, field, value) {
+    renderDrinkSelect();
 
-  if (
-    field === "M" ||
-    field === "L"
-  ) {
 
-    data.menu[categoryIndex].items[itemIndex][field] =
-      Number(value) || 0;
+  }
 
-  } else {
+  catch(error) {
 
-    data.menu[categoryIndex].items[itemIndex][field] =
-      value;
+    alert(
+      "菜單發布失敗。"
+    );
 
   }
 
 }
 
 
-function deleteCategory(index) {
+/* =====================================================
+   菜單編輯器
+===================================================== */
+
+function toggleEditor() {
+
+  const editor =
+    document
+      .getElementById(
+        "menuEditor"
+      );
+
+
+  editor.classList.toggle(
+    "hidden"
+  );
+
 
   if (
-    !confirm("確定要刪除這個分類嗎？")
-  ) return;
+    !editor.classList.contains(
+      "hidden"
+    )
+  ) {
 
-  data.menu.splice(index, 1);
+    renderEditor();
 
-  renderMenuEditor();
+  }
+
+}
+
+
+function renderEditor() {
+
+  const container =
+    document
+      .getElementById(
+        "editorContainer"
+      );
+
+
+  container.innerHTML =
+    "";
+
+
+  data.menu.forEach(
+    function(category, ci) {
+
+      const box =
+        document.createElement(
+          "div"
+        );
+
+
+      box.className =
+        "category-editor";
+
+
+      const header =
+        document.createElement(
+          "div"
+        );
+
+
+      header.className =
+        "category-header";
+
+
+      const input =
+        document.createElement(
+          "input"
+        );
+
+
+      input.value =
+        category.category;
+
+
+      input.onchange =
+        function() {
+
+          category.category =
+            input.value;
+
+        };
+
+
+      const del =
+        document.createElement(
+          "button"
+        );
+
+
+      del.className =
+        "red small";
+
+
+      del.textContent =
+        "刪除分類";
+
+
+      del.onclick =
+        function() {
+
+          data.menu.splice(
+            ci,
+            1
+          );
+
+          renderEditor();
+
+        };
+
+
+      header.appendChild(
+        input
+      );
+
+
+      header.appendChild(
+        del
+      );
+
+
+      box.appendChild(
+        header
+      );
+
+
+      category.items.forEach(
+        function(item, ii) {
+
+          const row =
+            document.createElement(
+              "div"
+            );
+
+
+          row.className =
+            "drink-editor";
+
+
+          const name =
+            document.createElement(
+              "input"
+            );
+
+
+          name.value =
+            item.name;
+
+
+          name.onchange =
+            function() {
+
+              item.name =
+                name.value;
+
+            };
+
+
+          const m =
+            document.createElement(
+              "input"
+            );
+
+
+          m.type =
+            "number";
+
+
+          m.value =
+            item.M;
+
+
+          m.onchange =
+            function() {
+
+              item.M =
+                Number(m.value) || 0;
+
+            };
+
+
+          const l =
+            document.createElement(
+              "input"
+            );
+
+
+          l.type =
+            "number";
+
+
+          l.value =
+            item.L;
+
+
+          l.onchange =
+            function() {
+
+              item.L =
+                Number(l.value) || 0;
+
+            };
+
+
+          const remove =
+            document.createElement(
+              "button"
+            );
+
+
+          remove.className =
+            "red small";
+
+
+          remove.textContent =
+            "×";
+
+
+          remove.onclick =
+            function() {
+
+              category.items.splice(
+                ii,
+                1
+              );
+
+              renderEditor();
+
+            };
+
+
+          row.appendChild(
+            name
+          );
+
+          row.appendChild(
+            m
+          );
+
+          row.appendChild(
+            l
+          );
+
+          row.appendChild(
+            remove
+          );
+
+
+          box.appendChild(
+            row
+          );
+
+        }
+      );
+
+
+      const add =
+        document.createElement(
+          "button"
+        );
+
+
+      add.className =
+        "gray small";
+
+
+      add.textContent =
+        "＋ 新增飲料";
+
+
+      add.onclick =
+        function() {
+
+          category.items.push({
+
+            name: "新飲料",
+
+            M: 50,
+
+            L: 60
+
+          });
+
+
+          renderEditor();
+
+        };
+
+
+      box.appendChild(
+        add
+      );
+
+
+      container.appendChild(
+        box
+      );
+
+    }
+  );
 
 }
 
@@ -1327,208 +2321,243 @@ function deleteCategory(index) {
 function addCategory() {
 
   data.menu.push({
+
     category: "新分類",
+
     items: [
+
       {
         name: "新飲料",
         M: 50,
         L: 60
       }
+
     ]
+
   });
 
-  renderMenuEditor();
+
+  renderEditor();
 
 }
 
 
-function addDrink(categoryIndex) {
-
-  data.menu[categoryIndex].items.push({
-    name: "新飲料",
-    M: 50,
-    L: 60
-  });
-
-  renderMenuEditor();
-
-}
-
-
-function deleteDrink(categoryIndex, itemIndex) {
-
-  data.menu[categoryIndex].items.splice(
-    itemIndex,
-    1
-  );
-
-  renderMenuEditor();
-
-}
-
-
-/* =========================================================
-   從編輯器讀取菜單
-   ========================================================= */
-
-function readMenuFromEditor() {
-
-  /*
-    data.menu 本身已經由 onchange 更新，
-    所以這裡直接回傳。
-  */
-
-  return data.menu;
-
-}
-
-
-/* =========================================================
-   顯示菜單
-   ========================================================= */
-
-function renderMenu() {
-
-  const container =
-    document.getElementById("drinkSelect");
-
-}
-
-
-/* =========================================================
-   飲料下拉選單
-   ========================================================= */
+/* =====================================================
+   飲料選單
+===================================================== */
 
 function renderDrinkSelect() {
 
   const select =
-    document.getElementById("drinkSelect");
+    document
+      .getElementById(
+        "drinkSelect"
+      );
 
-  select.innerHTML = "";
 
-  data.menu.forEach(category => {
+  select.innerHTML =
+    "";
 
-    const group =
-      document.createElement("optgroup");
 
-    group.label =
-      category.category;
+  data.menu.forEach(
+    function(category) {
 
-    category.items.forEach(item => {
+      const group =
+        document.createElement(
+          "optgroup"
+        );
 
-      const option =
-        document.createElement("option");
 
-      option.value =
-        JSON.stringify({
-          name: item.name,
-          M: Number(item.M) || 0,
-          L: Number(item.L) || 0
-        });
+      group.label =
+        category.category;
 
-      option.textContent =
-        `${item.name}（M $${item.M}／L $${item.L}）`;
 
-      group.appendChild(option);
+      category.items.forEach(
+        function(item) {
 
-    });
+          const option =
+            document.createElement(
+              "option"
+            );
 
-    select.appendChild(group);
 
-  });
+          option.value =
+            JSON.stringify({
+
+              name:
+                item.name,
+
+              M:
+                Number(item.M) || 0,
+
+              L:
+                Number(item.L) || 0
+
+            });
+
+
+          option.textContent =
+            item.name +
+            "（M $" +
+            item.M +
+            "／L $" +
+            item.L +
+            "）";
+
+
+          group.appendChild(
+            option
+          );
+
+        }
+      );
+
+
+      select.appendChild(
+        group
+      );
+
+    }
+  );
+
 
   updatePrice();
 
 }
 
 
-/* =========================================================
+/* =====================================================
    加料
-   ========================================================= */
+===================================================== */
 
 function renderToppings() {
 
   const container =
-    document.getElementById("toppingList");
+    document
+      .getElementById(
+        "toppingList"
+      );
 
-  container.innerHTML = "";
 
-  toppings.forEach((topping, index) => {
+  container.innerHTML =
+    "";
 
-    const button =
-      document.createElement("button");
 
-    button.className =
-      "name-btn small";
+  toppings.forEach(
+    function(topping, index) {
 
-    button.textContent =
-      `${topping.name} +$${topping.price}`;
-
-    button.onclick = () => {
-
-      const exists =
-        selectedToppings.includes(index);
-
-      if (exists) {
-
-        selectedToppings =
-          selectedToppings.filter(
-            i => i !== index
-          );
-
-        button.classList.remove(
-          "selected"
+      const button =
+        document.createElement(
+          "button"
         );
 
-      } else {
 
-        selectedToppings.push(index);
+      button.className =
+        "person-btn small";
 
-        button.classList.add(
-          "selected"
-        );
 
-      }
+      button.textContent =
+        topping.name +
+        " +$" +
+        topping.price;
 
-      updatePrice();
 
-    };
+      button.onclick =
+        function() {
 
-    container.appendChild(button);
+          if (
+            selectedToppings
+              .includes(index)
+          ) {
 
-  });
+            selectedToppings =
+              selectedToppings
+                .filter(
+                  function(i) {
+                    return i !== index;
+                  }
+                );
+
+
+            button.classList.remove(
+              "selected"
+            );
+
+          }
+
+          else {
+
+            selectedToppings.push(
+              index
+            );
+
+
+            button.classList.add(
+              "selected"
+            );
+
+          }
+
+
+          updatePrice();
+
+        };
+
+
+      container.appendChild(
+        button
+      );
+
+    }
+  );
 
 }
 
 
-/* =========================================================
+/* =====================================================
    價格
-   ========================================================= */
+===================================================== */
 
 function getCurrentPrice() {
 
-  const option =
-    document.getElementById("drinkSelect")
+  const value =
+    document
+      .getElementById(
+        "drinkSelect"
+      )
       .value;
 
-  if (!option) return 0;
+
+  if (!value) return 0;
+
 
   const drink =
-    JSON.parse(option);
+    JSON.parse(value);
+
 
   const size =
-    document.getElementById("sizeSelect")
+    document
+      .getElementById(
+        "sizeSelect"
+      )
       .value;
 
+
   let price =
-    Number(drink[size]) || 0;
+    Number(
+      drink[size]
+    ) || 0;
 
-  selectedToppings.forEach(index => {
 
-    price +=
-      toppings[index].price;
+  selectedToppings.forEach(
+    function(index) {
 
-  });
+      price +=
+        toppings[index].price;
+
+    }
+  );
+
 
   return price;
 
@@ -1537,200 +2566,539 @@ function getCurrentPrice() {
 
 function updatePrice() {
 
-  document.getElementById("currentPrice")
+  document
+    .getElementById(
+      "currentPrice"
+    )
     .textContent =
-      "$" + getCurrentPrice();
+    "$" +
+    getCurrentPrice();
 
 }
 
 
-document
-  .addEventListener("change", function(e) {
+/* =====================================================
+   Firebase 共用人員
+===================================================== */
 
-    if (
-      e.target.id === "drinkSelect" ||
-      e.target.id === "sizeSelect"
-    ) {
+async function loadPeopleFromFirebase() {
 
-      updatePrice();
+  const container =
+    document
+      .getElementById(
+        "peopleList"
+      );
+
+
+  try {
+
+    const result =
+      await dbGet(
+        "drinkOrderPeople"
+      );
+
+
+    const people =
+      result || {};
+
+
+    container.innerHTML =
+      "";
+
+
+    const names =
+      Object.entries(
+        people
+      );
+
+
+    if (!names.length) {
+
+      container.innerHTML =
+        `
+        <div style="color:#999;">
+          還沒有訂購人。
+        </div>
+        `;
+
+      return;
 
     }
 
-  });
+
+    names.forEach(
+      function([id, person]) {
+
+        const button =
+          document.createElement(
+            "button"
+          );
 
 
-/* =========================================================
-   姓名名單
-   ========================================================= */
+        button.className =
+          "person-btn";
 
-function loadNames() {
 
-  const names =
-    JSON.parse(
-      localStorage.getItem(
-        "drinkOrderNames"
-      ) || "[]"
+        if (
+          selectedName ===
+          person.name
+        ) {
+
+          button.classList.add(
+            "selected"
+          );
+
+        }
+
+
+        button.textContent =
+          person.name;
+
+
+        button.onclick =
+          function() {
+
+            selectedName =
+              person.name;
+
+
+            renderPeople(people);
+
+          };
+
+
+        button.oncontextmenu =
+          async function(event) {
+
+            event.preventDefault();
+
+
+            if (
+              confirm(
+                "確定要刪除「" +
+                person.name +
+                "」嗎？"
+              )
+            ) {
+
+              await dbDelete(
+                "drinkOrderPeople/" +
+                id
+              );
+
+
+              loadPeopleFromFirebase();
+
+            }
+
+          };
+
+
+        container.appendChild(
+          button
+        );
+
+      }
     );
 
-  renderNames(names);
+  }
+
+  catch(error) {
+
+    container.innerHTML =
+      `
+      <div style="color:#c44;">
+        無法讀取共用名單
+      </div>
+      `;
+
+  }
 
 }
 
 
-function getNames() {
+/*
+  用這個函式只是為了重新畫面。
+*/
 
-  return JSON.parse(
-    localStorage.getItem(
-      "drinkOrderNames"
-    ) || "[]"
+function renderPeople(people) {
+
+  const container =
+    document
+      .getElementById(
+        "peopleList"
+      );
+
+
+  container.innerHTML =
+    "";
+
+
+  Object.entries(
+    people
+  ).forEach(
+    function([id, person]) {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+
+      button.className =
+        "person-btn";
+
+
+      if (
+        selectedName ===
+        person.name
+      ) {
+
+        button.classList.add(
+          "selected"
+        );
+
+      }
+
+
+      button.textContent =
+        person.name;
+
+
+      button.onclick =
+        function() {
+
+          selectedName =
+            person.name;
+
+
+          loadPeopleFromFirebase();
+
+        };
+
+
+      container.appendChild(
+        button
+      );
+
+    }
   );
 
 }
 
 
-function addName() {
+async function addPerson() {
 
   const input =
-    document.getElementById("newName");
+    document
+      .getElementById(
+        "newPerson"
+      );
+
 
   const name =
     input.value.trim();
 
+
   if (!name) {
 
-    alert("請輸入姓名");
+    alert(
+      "請輸入姓名。"
+    );
 
     return;
 
   }
 
-  let names =
-    getNames();
 
-  if (!names.includes(name)) {
+  const people =
+    await dbGet(
+      "drinkOrderPeople"
+    ) || {};
 
-    names.push(name);
 
-    localStorage.setItem(
-      "drinkOrderNames",
-      JSON.stringify(names)
+  const exists =
+    Object.values(
+      people
+    ).some(
+      function(person) {
+        return person.name === name;
+      }
+    );
+
+
+  if (exists) {
+
+    alert(
+      "這個名字已經存在。"
+    );
+
+    return;
+
+  }
+
+
+  const id =
+    "person_" +
+    Date.now();
+
+
+  await dbPut(
+    "drinkOrderPeople/" +
+    id,
+
+    {
+      name: name,
+
+      createdAt:
+        new Date().toISOString()
+    }
+  );
+
+
+  input.value =
+    "";
+
+
+  selectedName =
+    name;
+
+
+  await loadPeopleFromFirebase();
+
+
+  toast(
+    "✅ 已新增 " +
+    name
+  );
+
+}
+
+
+/* =====================================================
+   昨日訂購者
+===================================================== */
+
+async function useYesterdayPeople() {
+
+  const yesterday =
+    new Date(
+      currentDate +
+      "T00:00:00"
+    );
+
+
+  yesterday.setDate(
+    yesterday.getDate() - 1
+  );
+
+
+  const date =
+    yesterday.getFullYear() +
+    "-" +
+    String(
+      yesterday.getMonth() + 1
+    ).padStart(2, "0") +
+    "-" +
+    String(
+      yesterday.getDate()
+    ).padStart(2, "0");
+
+
+  try {
+
+    const orders =
+      await dbGet(
+        "drinkOrders/" +
+        date +
+        "/orders"
+      );
+
+
+    if (!orders) {
+
+      alert(
+        "昨天沒有訂單。"
+      );
+
+      return;
+
+    }
+
+
+    const names =
+      [
+        ...new Set(
+          Object.values(
+            orders
+          )
+          .map(
+            function(order) {
+              return order.name;
+            }
+          )
+        )
+      ];
+
+
+    for (
+      const name of names
+    ) {
+
+      const people =
+        await dbGet(
+          "drinkOrderPeople"
+        ) || {};
+
+
+      const exists =
+        Object.values(
+          people
+        ).some(
+          function(person) {
+            return person.name === name;
+          }
+        );
+
+
+      if (!exists) {
+
+        await dbPut(
+          "drinkOrderPeople/person_" +
+          Date.now() +
+          "_" +
+          Math.random()
+            .toString(36)
+            .substring(2, 7),
+
+          {
+            name: name,
+
+            createdAt:
+              new Date().toISOString()
+          }
+        );
+
+      }
+
+    }
+
+
+    await loadPeopleFromFirebase();
+
+
+    toast(
+      "✅ 已沿用昨天訂購者"
     );
 
   }
 
-  input.value = "";
+  catch(error) {
 
-  renderNames(names);
-
-}
-
-
-function renderNames(names) {
-
-  const container =
-    document.getElementById("nameList");
-
-  container.innerHTML = "";
-
-  if (!names.length) {
-
-    container.innerHTML =
-      `<div style="color:#999;font-size:14px;">
-        還沒有姓名，請先新增同事。
-      </div>`;
-
-    return;
+    alert(
+      "讀取昨天訂單失敗。"
+    );
 
   }
 
-  names.forEach(name => {
-
-    const button =
-      document.createElement("button");
-
-    button.className =
-      "name-btn";
-
-    if (name === selectedName) {
-
-      button.classList.add("selected");
-
-    }
-
-    button.textContent =
-      name;
-
-    button.onclick = () => {
-
-      selectedName = name;
-
-      renderNames(names);
-
-    };
-
-    container.appendChild(button);
-
-  });
-
 }
 
 
-/* =========================================================
+/* =====================================================
    新增訂單
-   ========================================================= */
+===================================================== */
 
 async function addOrder() {
 
   if (!data.isOpen) {
 
-    alert("目前已關閉訂購。");
+    alert(
+      "目前已關閉訂購。"
+    );
 
     return;
 
   }
+
 
   if (!selectedName) {
 
-    alert("請先選擇你的姓名。");
+    alert(
+      "請先選擇姓名。"
+    );
 
     return;
 
   }
 
-  const option =
-    document.getElementById("drinkSelect")
+
+  const value =
+    document
+      .getElementById(
+        "drinkSelect"
+      )
       .value;
 
-  if (!option) {
 
-    alert("請先選擇飲料。");
+  if (!value) {
+
+    alert(
+      "請先選擇飲料。"
+    );
 
     return;
 
   }
+
 
   const drink =
-    JSON.parse(option);
+    JSON.parse(value);
+
 
   const size =
-    document.getElementById("sizeSelect")
+    document
+      .getElementById(
+        "sizeSelect"
+      )
       .value;
+
 
   const sugar =
-    document.getElementById("sugarSelect")
+    document
+      .getElementById(
+        "sugarSelect"
+      )
       .value;
 
+
   const ice =
-    document.getElementById("iceSelect")
+    document
+      .getElementById(
+        "iceSelect"
+      )
       .value;
+
 
   const toppingNames =
     selectedToppings.map(
-      index => toppings[index].name
+      function(index) {
+        return toppings[index].name;
+      }
     );
+
 
   const price =
     getCurrentPrice();
+
+
+  /*
+    每筆訂單都有自己的 ID。
+
+    這是這一版很重要的修改。
+
+    A 點餐與 B 點餐同時發生，
+    不會互相覆蓋。
+  */
 
   const orderId =
     "order_" +
@@ -1738,217 +3106,437 @@ async function addOrder() {
     "_" +
     Math.random()
       .toString(36)
-      .substring(2, 7);
+      .substring(2, 9);
 
-  if (!data.orders) {
 
-    data.orders = {};
+  const order = {
 
-  }
+    name:
+      selectedName,
 
-  data.orders[orderId] = {
+    drink:
+      drink.name,
 
-    name: selectedName,
+    size:
+      size,
 
-    drink: drink.name,
+    sugar:
+      sugar,
 
-    size: size,
+    ice:
+      ice,
 
-    sugar: sugar,
+    toppings:
+      toppingNames,
 
-    ice: ice,
-
-    toppings: toppingNames,
-
-    price: price,
+    price:
+      price,
 
     createdAt:
       new Date().toISOString()
 
   };
 
-  await saveAll();
 
-  renderOrders();
+  try {
 
-  alert(
-    `✅ ${selectedName} 的訂單已加入！`
-  );
+    await dbPut(
+
+      "drinkOrders/" +
+      currentDate +
+      "/orders/" +
+      orderId,
+
+      order
+
+    );
+
+
+    /*
+      立即更新畫面
+    */
+
+    data.orders[orderId] =
+      order;
+
+
+    renderOrders();
+
+
+    toast(
+      "✅ 已加入 " +
+      selectedName +
+      " 的訂單"
+    );
+
+  }
+
+  catch(error) {
+
+    console.error(error);
+
+    alert(
+      "訂單加入失敗，請再試一次。"
+    );
+
+  }
 
 }
 
 
-/* =========================================================
+/* =====================================================
    刪除訂單
-   ========================================================= */
+===================================================== */
 
-async function deleteOrder(orderId) {
+async function deleteOrder(
+  orderId
+) {
 
   if (
-    !confirm("確定要刪除這筆訂單嗎？")
-  ) return;
+    !confirm(
+      "確定要刪除這杯飲料嗎？"
+    )
+  ) {
 
-  delete data.orders[orderId];
+    return;
 
-  await saveAll();
+  }
 
-  renderOrders();
+
+  try {
+
+    await dbDelete(
+
+      "drinkOrders/" +
+      currentDate +
+      "/orders/" +
+      orderId
+
+    );
+
+
+    delete data.orders[
+      orderId
+    ];
+
+
+    renderOrders();
+
+
+    toast(
+      "🗑️ 已刪除訂單"
+    );
+
+  }
+
+  catch(error) {
+
+    alert(
+      "刪除失敗。"
+    );
+
+  }
 
 }
 
 
-/* =========================================================
-   顯示訂單
-   ========================================================= */
+/* =====================================================
+   訂單顯示
+===================================================== */
 
 function renderOrders() {
 
   const container =
-    document.getElementById(
-      "ordersContainer"
-    );
+    document
+      .getElementById(
+        "ordersContainer"
+      );
 
-  container.innerHTML = "";
+
+  container.innerHTML =
+    "";
+
 
   const orders =
     Object.entries(
       data.orders || {}
     );
 
+
   if (!orders.length) {
 
     container.innerHTML =
-      `<div class="empty">
+      `
+      <div style="
+        text-align:center;
+        color:#999;
+        padding:20px;
+      ">
         目前還沒有人點餐。
-      </div>`;
+      </div>
+      `;
 
-    document.getElementById(
-      "totalAmount"
-    ).textContent = "$0";
+
+    document
+      .getElementById(
+        "totalAmount"
+      )
+      .textContent =
+      "$0";
+
 
     return;
 
   }
 
-  let total = 0;
-
-  /*
-    依姓名分組
-  */
 
   const grouped = {};
 
-  orders.forEach(([id, order]) => {
 
-    if (!grouped[order.name]) {
+  let total =
+    0;
 
-      grouped[order.name] = [];
 
-    }
+  orders.forEach(
+    function([id, order]) {
 
-    grouped[order.name].push({
-      id,
-      ...order
-    });
+      if (
+        !grouped[
+          order.name
+        ]
+      ) {
 
-    total +=
-      Number(order.price) || 0;
+        grouped[
+          order.name
+        ] = [];
 
-  });
+      }
 
-  Object.entries(grouped)
-    .forEach(([name, userOrders]) => {
 
-      const wrapper =
-        document.createElement("div");
+      grouped[
+        order.name
+      ].push({
 
-      wrapper.className =
-        "order-row";
+        id: id,
 
-      const header =
-        document.createElement("div");
-
-      header.className =
-        "order-header";
-
-      header.innerHTML = `
-        <div class="order-name">
-          ${escapeHtml(name)}
-        </div>
-
-        <div class="price">
-          $${userOrders.reduce(
-            (sum, o) =>
-              sum + Number(o.price || 0),
-            0
-          )}
-        </div>
-      `;
-
-      wrapper.appendChild(header);
-
-      userOrders.forEach(order => {
-
-        const detail =
-          document.createElement("div");
-
-        detail.className =
-          "order-detail";
-
-        const toppingsText =
-          order.toppings &&
-          order.toppings.length
-            ? "、" +
-              order.toppings.join("、")
-            : "";
-
-        detail.innerHTML = `
-          ${escapeHtml(order.drink)}
-          ／ ${order.size}
-          ／ ${escapeHtml(order.sugar)}
-          ／ ${escapeHtml(order.ice)}
-          ${toppingsText
-            ? `<br>加料：${escapeHtml(toppingsText)}`
-            : ""}
-          <br>
-          <strong>$${order.price}</strong>
-
-          <button
-            class="red small"
-            style="margin-left:8px;"
-            onclick="deleteOrder('${order.id}')"
-          >
-            刪除
-          </button>
-        `;
-
-        wrapper.appendChild(detail);
+        ...order
 
       });
 
-      container.appendChild(wrapper);
 
-    });
+      total +=
+        Number(
+          order.price
+        ) || 0;
 
-  document.getElementById(
-    "totalAmount"
-  ).textContent =
-    "$" + total;
+    }
+  );
+
+
+  Object.entries(
+    grouped
+  ).forEach(
+    function([name, list]) {
+
+      const box =
+        document.createElement(
+          "div"
+        );
+
+
+      box.className =
+        "order-person";
+
+
+      const personTotal =
+        list.reduce(
+          function(sum, order) {
+
+            return sum +
+              Number(
+                order.price
+              ) || 0;
+
+          },
+          0
+        );
+
+
+      const header =
+        document.createElement(
+          "div"
+        );
+
+
+      header.className =
+        "person-header";
+
+
+      header.innerHTML =
+
+        "<span>" +
+        escapeHtml(name) +
+        "</span>" +
+
+        "<span>$" +
+        personTotal +
+        "</span>";
+
+
+      box.appendChild(
+        header
+      );
+
+
+      list.forEach(
+        function(order) {
+
+          const item =
+            document.createElement(
+              "div"
+            );
+
+
+          item.className =
+            "order-item";
+
+
+          let text =
+
+            escapeHtml(
+              order.drink
+            ) +
+
+            " ／ " +
+
+            escapeHtml(
+              order.size
+            ) +
+
+            " ／ " +
+
+            escapeHtml(
+              order.sugar
+            ) +
+
+            " ／ " +
+
+            escapeHtml(
+              order.ice
+            );
+
+
+          if (
+            order.toppings &&
+            order.toppings.length
+          ) {
+
+            text +=
+              "<br>加料：" +
+              escapeHtml(
+                order.toppings.join(
+                  "、"
+                )
+              );
+
+          }
+
+
+          text +=
+            "<br><strong>$" +
+            order.price +
+            "</strong>";
+
+
+          text +=
+            `
+            <div class="order-actions">
+              <button
+                class="red small"
+                onclick="deleteOrder('${order.id}')"
+              >
+                刪除
+              </button>
+            </div>
+            `;
+
+
+          item.innerHTML =
+            text;
+
+
+          box.appendChild(
+            item
+          );
+
+        }
+      );
+
+
+      container.appendChild(
+        box
+      );
+
+    }
+  );
+
+
+  document
+    .getElementById(
+      "totalAmount"
+    )
+    .textContent =
+    "$" +
+    total;
 
 }
 
 
-/* =========================================================
-   開關訂購
-   ========================================================= */
+/* =====================================================
+   開團／關團
+===================================================== */
 
-async function setOrderStatus(isOpen) {
+async function setOrderStatus(
+  isOpen
+) {
 
-  data.isOpen = isOpen;
+  data.isOpen =
+    isOpen;
 
-  await saveAll();
 
-  renderStatus();
+  try {
+
+    await dbPatch(
+
+      "drinkOrders/" +
+      currentDate,
+
+      {
+        isOpen:
+          isOpen
+      }
+
+    );
+
+
+    renderStatus();
+
+
+    toast(
+      isOpen
+        ? "🔓 已開始訂購"
+        : "🔒 已關閉訂購"
+    );
+
+  }
+
+  catch(error) {
+
+    alert(
+      "狀態更新失敗。"
+    );
+
+  }
 
 }
 
@@ -1956,47 +3544,61 @@ async function setOrderStatus(isOpen) {
 function renderStatus() {
 
   const badge =
-    document.getElementById(
-      "statusBadge"
-    );
+    document
+      .getElementById(
+        "statusBadge"
+      );
+
 
   const form =
-    document.getElementById(
-      "orderForm"
-    );
+    document
+      .getElementById(
+        "orderForm"
+      );
+
 
   const closed =
-    document.getElementById(
-      "closedMessage"
-    );
+    document
+      .getElementById(
+        "closedMessage"
+      );
+
 
   if (data.isOpen) {
 
     badge.className =
       "status open";
 
+
     badge.textContent =
       "● 訂購中";
+
 
     form.classList.remove(
       "hidden"
     );
 
+
     closed.classList.add(
       "hidden"
     );
 
-  } else {
+  }
+
+  else {
 
     badge.className =
       "status closed";
 
+
     badge.textContent =
       "● 已關閉";
+
 
     form.classList.add(
       "hidden"
     );
+
 
     closed.classList.remove(
       "hidden"
@@ -2007,103 +3609,169 @@ function renderStatus() {
 }
 
 
-/* =========================================================
-   LINE 訊息
-   ========================================================= */
+/* =====================================================
+   LINE
+===================================================== */
 
 function generateLineMessage() {
 
   const orders =
-    Object.entries(
+    Object.values(
       data.orders || {}
     );
 
+
   if (!orders.length) {
 
-    alert("目前沒有訂單。");
+    alert(
+      "目前沒有訂單。"
+    );
 
     return;
 
   }
 
+
   const grouped = {};
 
-  orders.forEach(([id, order]) => {
 
-    if (!grouped[order.name]) {
+  orders.forEach(
+    function(order) {
 
-      grouped[order.name] = [];
+      if (
+        !grouped[
+          order.name
+        ]
+      ) {
+
+        grouped[
+          order.name
+        ] = [];
+
+      }
+
+
+      grouped[
+        order.name
+      ].push(
+        order
+      );
 
     }
+  );
 
-    grouped[order.name].push(order);
-
-  });
 
   let text = "";
 
-  text +=
-    `🥤 ${data.shopName} 飲料團購\n`;
 
   text +=
-    `📅 ${currentDate}\n\n`;
+    "🥤 " +
+    data.shopName +
+    " 飲料團購\n";
 
-  Object.entries(grouped)
-    .forEach(([name, userOrders]) => {
 
-      const total =
-        userOrders.reduce(
-          (sum, order) =>
-            sum + Number(order.price || 0),
+  text +=
+    "📅 " +
+    currentDate +
+    "\n\n";
+
+
+  Object.entries(
+    grouped
+  ).forEach(
+    function([name, list]) {
+
+      const personTotal =
+        list.reduce(
+          function(sum, order) {
+
+            return sum +
+              Number(
+                order.price
+              ) || 0;
+
+          },
           0
         );
 
+
       text +=
-        `【${name}】 $${total}\n`;
+        "【" +
+        name +
+        "】 $" +
+        personTotal +
+        "\n";
 
-      userOrders.forEach(order => {
 
-        text +=
-          `・${order.drink} ${order.size}`;
-
-        text +=
-          `／${order.sugar}`;
-
-        text +=
-          `／${order.ice}`;
-
-        if (
-          order.toppings &&
-          order.toppings.length
-        ) {
+      list.forEach(
+        function(order) {
 
           text +=
-            `／加${order.toppings.join("、")}`;
+            "・" +
+            order.drink +
+            " " +
+            order.size +
+            "／" +
+            order.sugar +
+            "／" +
+            order.ice;
+
+
+          if (
+            order.toppings &&
+            order.toppings.length
+          ) {
+
+            text +=
+              "／加" +
+              order.toppings.join(
+                "、"
+              );
+
+          }
+
+
+          text +=
+            " $" +
+            order.price +
+            "\n";
 
         }
+      );
 
-        text +=
-          ` $${order.price}\n`;
 
-      });
+      text +=
+        "\n";
 
-      text += "\n";
+    }
+  );
 
-    });
 
   const total =
     orders.reduce(
-      (sum, [id, order]) =>
-        sum + Number(order.price || 0),
+      function(sum, order) {
+
+        return sum +
+          Number(
+            order.price
+          ) || 0;
+
+      },
       0
     );
 
-  text +=
-    `💰 總計：$${total}`;
 
-  document.getElementById(
-    "lineMessage"
-  ).value = text;
+  text +=
+    "💰 總計：$" +
+    total;
+
+
+  document
+    .getElementById(
+      "lineMessage"
+    )
+    .value =
+    text;
 
 }
 
@@ -2111,9 +3779,11 @@ function generateLineMessage() {
 async function copyLineMessage() {
 
   const textarea =
-    document.getElementById(
-      "lineMessage"
-    );
+    document
+      .getElementById(
+        "lineMessage"
+      );
+
 
   if (!textarea.value) {
 
@@ -2121,17 +3791,23 @@ async function copyLineMessage() {
 
   }
 
+
   try {
 
-    await navigator.clipboard.writeText(
-      textarea.value
+    await navigator
+      .clipboard
+      .writeText(
+        textarea.value
+      );
+
+
+    toast(
+      "📋 已複製，可以貼到 LINE"
     );
 
-    alert(
-      "✅ 已複製，可以直接貼到 LINE！"
-    );
+  }
 
-  } catch {
+  catch(error) {
 
     textarea.select();
 
@@ -2139,8 +3815,9 @@ async function copyLineMessage() {
       "copy"
     );
 
-    alert(
-      "✅ 已複製！"
+
+    toast(
+      "📋 已複製"
     );
 
   }
@@ -2148,11 +3825,11 @@ async function copyLineMessage() {
 }
 
 
-/* =========================================================
-   全部重新顯示
-   ========================================================= */
+/* =====================================================
+   全部渲染
+===================================================== */
 
-function renderEverything() {
+function renderAll() {
 
   renderStatus();
 
@@ -2160,25 +3837,82 @@ function renderEverything() {
 
   renderOrders();
 
-  renderNames(
-    getNames()
+}
+
+
+/* =====================================================
+   工具
+===================================================== */
+
+function clone(value) {
+
+  return JSON.parse(
+    JSON.stringify(value)
   );
 
 }
 
 
-/* =========================================================
-   HTML 安全處理
-   ========================================================= */
-
 function escapeHtml(value) {
 
   return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+function toast(message) {
+
+  const element =
+    document
+      .getElementById(
+        "toast"
+      );
+
+
+  element.textContent =
+    message;
+
+
+  element.classList.add(
+    "show"
+  );
+
+
+  setTimeout(
+    function() {
+
+      element.classList.remove(
+        "show"
+      );
+
+    },
+    2200
+  );
 
 }
 
